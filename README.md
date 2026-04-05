@@ -48,11 +48,35 @@ projet-Ben-Dan/
 
 ## Installation
 
+**1. Cloner le dépôt**
+
+```bash
+git clone https://github.com/Ben-126/Quiz_2nd.git
+cd Quiz_2nd
+```
+
+**2. Installer les dépendances**
+
 ```bash
 cd quiz-app
 npm install
-cp .env.example .env.local
-# Ajouter ANTHROPIC_API_KEY dans .env.local
+```
+
+**3. Configurer les variables d'environnement**
+
+```bash
+copy .env.example .env.local
+```
+
+Ouvrir `.env.local` et renseigner ta clé API Anthropic :
+
+```
+ANTHROPIC_API_KEY=sk-ant-...
+```
+
+**4. Lancer l'application**
+
+```bash
 npm run dev
 ```
 
