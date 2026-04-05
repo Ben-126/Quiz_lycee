@@ -1,0 +1,26 @@
+# Variables d'environnement et secrets
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+*.pfx
+
+# Fichiers de configuration sensibles
+config.local.*
+secrets.*
+credentials.*
+
+# Dossiers sensibles
+secrets/
+private/
+
+# Systèmes d'exploitation
+.DS_Store
+Thumbs.db
+
+# Editeurs
+.vscode/
+.idea/
+*.swp
