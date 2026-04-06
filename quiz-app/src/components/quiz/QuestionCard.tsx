@@ -1,5 +1,7 @@
 "use client";
+import { useState, useRef } from "react";
 import type { Question } from "@/types";
+import MathKeyboard from "./MathKeyboard";
 
 interface QuestionCardProps {
   question: Question;
@@ -7,9 +9,30 @@ interface QuestionCardProps {
   total: number;
   onAnswer: (reponse: string | boolean) => void;
   disabled: boolean;
+  showMathKeyboard?: boolean;
 }
 
-export default function QuestionCard({ question, index, total, onAnswer, disabled }: QuestionCardProps) {
+export default function QuestionCard({ question, index, total, onAnswer, disabled, showMathKeyboard = false }: QuestionCardProps) {
+  const [valeur, setValeur] = useState("");
+  const [clavierOuvert, setClavierOuvert] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const insererSymbole = (symbole: string) => {
+    const input = inputRef.current;
+    if (!input) {
+      setValeur((prev) => prev + symbole);
+      return;
+    }
+    const debut = input.selectionStart ?? valeur.length;
+    const fin = input.selectionEnd ?? valeur.length;
+    const nouvelleValeur = valeur.slice(0, debut) + symbole + valeur.slice(fin);
+    setValeur(nouvelleValeur);
+    requestAnimationFrame(() => {
+      input.setSelectionRange(debut + symbole.length, debut + symbole.length);
+      input.focus();
+    });
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-2 mb-2">
@@ -66,22 +89,49 @@ export default function QuestionCard({ question, index, total, onAnswer, disable
           data-testid="form-reponse-courte"
           onSubmit={(e) => {
             e.preventDefault();
-            const input = (e.currentTarget.elements.namedItem("reponse") as HTMLInputElement);
-            if (input.value.trim()) {
-              onAnswer(input.value.trim());
+            if (valeur.trim()) {
+              onAnswer(valeur.trim());
+              setValeur("");
+              setClavierOuvert(false);
             }
           }}
           className="space-y-2"
         >
-          <input
-            name="reponse"
-            type="text"
-            placeholder="Écris ta réponse en quelques mots..."
-            disabled={disabled}
-            maxLength={200}
-            className="w-full px-4 py-3 rounded-xl border-2 border-gray-300 focus:border-indigo-400 focus:outline-none text-sm text-gray-900 placeholder-gray-400 transition-colors disabled:opacity-50"
-            autoComplete="off"
-          />
+          <div className="flex gap-2">
+            <input
+              ref={inputRef}
+              name="reponse"
+              type="text"
+              value={valeur}
+              onChange={(e) => setValeur(e.target.value)}
+              placeholder="Écris ta réponse en quelques mots..."
+              disabled={disabled}
+              maxLength={200}
+              className="flex-1 px-4 py-3 rounded-xl border-2 border-gray-300 focus:border-indigo-400 focus:outline-none text-sm text-gray-900 placeholder-gray-400 transition-colors disabled:opacity-50"
+              autoComplete="off"
+            />
+            {showMathKeyboard && !disabled && (
+              <button
+                type="button"
+                onClick={() => setClavierOuvert((o) => !o)}
+                title="Clavier mathématique"
+                className={`px-3 py-2 rounded-xl border-2 transition-colors ${
+                  clavierOuvert
+                    ? "border-blue-500 bg-blue-100 text-blue-700"
+                    : "border-gray-300 bg-gray-100 text-gray-600 hover:border-blue-400 hover:bg-blue-50"
+                }`}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                  <path fillRule="evenodd" d="M2.25 5.25a3 3 0 0 1 3-3h13.5a3 3 0 0 1 3 3V15a3 3 0 0 1-3 3h-3v.257c0 .597.237 1.17.659 1.591l.621.622a.75.75 0 0 1-.53 1.28h-9a.75.75 0 0 1-.53-1.28l.621-.622a2.25 2.25 0 0 0 .659-1.59V18h-3a3 3 0 0 1-3-3V5.25Zm1.5 0v7.5a1.5 1.5 0 0 0 1.5 1.5h13.5a1.5 1.5 0 0 0 1.5-1.5v-7.5a1.5 1.5 0 0 0-1.5-1.5H5.25a1.5 1.5 0 0 0-1.5 1.5Z" clipRule="evenodd" />
+                </svg>
+              </button>
+            )}
+          </div>
+
+          {showMathKeyboard && clavierOuvert && !disabled && (
+            <MathKeyboard onInsert={insererSymbole} />
+          )}
+
           <button
             type="submit"
             disabled={disabled}

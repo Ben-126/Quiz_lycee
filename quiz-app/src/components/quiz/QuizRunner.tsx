@@ -7,6 +7,8 @@ import ScoreDisplay from "./ScoreDisplay";
 
 type EtatQuiz = "chargement" | "question" | "verification" | "correction" | "termine" | "erreur";
 
+const MATIERES_AVEC_CLAVIER_MATH = new Set(["mathematiques", "physique-chimie", "svt", "snt"]);
+
 interface QuizRunnerProps {
   matiereSlug: string;
   chapitreSlug: string;
@@ -141,6 +143,7 @@ export default function QuizRunner({ matiereSlug, chapitreSlug, titreChapitre }:
   };
 
   const score = reponses.filter((r) => r.correcte).length;
+  const showMathKeyboard = MATIERES_AVEC_CLAVIER_MATH.has(matiereSlug);
 
   if (etat === "chargement") {
     return (
@@ -198,6 +201,7 @@ export default function QuizRunner({ matiereSlug, chapitreSlug, titreChapitre }:
           total={questions.length}
           onAnswer={handleReponse}
           disabled={false}
+          showMathKeyboard={showMathKeyboard}
         />
       )}
 
@@ -209,6 +213,7 @@ export default function QuizRunner({ matiereSlug, chapitreSlug, titreChapitre }:
             total={questions.length}
             onAnswer={handleReponse}
             disabled={true}
+            showMathKeyboard={showMathKeyboard}
           />
           <CorrectionDisplay
             question={questionCourante}
