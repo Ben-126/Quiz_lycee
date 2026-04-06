@@ -79,7 +79,7 @@ export default function QuestionCard({ question, index, total, onAnswer, disable
             placeholder="Écris ta réponse en quelques mots..."
             disabled={disabled}
             maxLength={200}
-            className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-indigo-400 focus:outline-none text-sm transition-colors disabled:opacity-50"
+            className="w-full px-4 py-3 rounded-xl border-2 border-gray-300 focus:border-indigo-400 focus:outline-none text-sm text-gray-900 placeholder-gray-400 transition-colors disabled:opacity-50"
             autoComplete="off"
           />
           <button
