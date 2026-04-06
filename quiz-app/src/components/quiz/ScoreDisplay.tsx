@@ -6,15 +6,20 @@ interface ScoreDisplayProps {
   total: number;
   matiereSlug: string;
   chapitreSlug: string;
+  questionsRatees?: string[];
+  modeRevision?: boolean;
   onRecommencer: () => void;
+  onReviserErreurs?: () => void;
 }
 
 export default function ScoreDisplay({
   score,
   total,
   matiereSlug,
-  chapitreSlug,
+  questionsRatees = [],
+  modeRevision = false,
   onRecommencer,
+  onReviserErreurs,
 }: ScoreDisplayProps) {
   const pourcentage = Math.round((score / total) * 100);
 
@@ -54,21 +59,38 @@ export default function ScoreDisplay({
 
       <p className="text-gray-600 font-medium">{texte}</p>
 
-      <div className="flex flex-col sm:flex-row gap-3">
-        <button
-          onClick={onRecommencer}
-          data-testid="btn-recommencer"
-          className="flex-1 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold transition-colors"
-        >
-          🔄 Refaire le quiz
-        </button>
-        <Link
-          href={`/${matiereSlug}`}
-          data-testid="btn-retour-chapitres"
-          className="flex-1 py-3 bg-white border-2 border-gray-200 hover:border-indigo-300 text-gray-700 hover:text-indigo-700 rounded-xl font-semibold transition-colors text-center"
-        >
-          ← Retour aux chapitres
-        </Link>
+      {modeRevision && questionsRatees.length === 0 && (
+        <div className="bg-green-50 border border-green-200 rounded-xl p-3 text-sm text-green-700 font-medium">
+          Bravo ! Tu as réussi toutes les questions de révision.
+        </div>
+      )}
+
+      <div className="flex flex-col gap-3">
+        {onReviserErreurs && questionsRatees.length > 0 && (
+          <button
+            onClick={onReviserErreurs}
+            data-testid="btn-reviser-erreurs"
+            className="w-full py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-semibold transition-colors"
+          >
+            📝 Réviser mes erreurs ({questionsRatees.length})
+          </button>
+        )}
+        <div className="flex flex-col sm:flex-row gap-3">
+          <button
+            onClick={onRecommencer}
+            data-testid="btn-recommencer"
+            className="flex-1 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold transition-colors"
+          >
+            🔄 Refaire le quiz
+          </button>
+          <Link
+            href={`/${matiereSlug}`}
+            data-testid="btn-retour-chapitres"
+            className="flex-1 py-3 bg-white border-2 border-gray-200 hover:border-indigo-300 text-gray-700 hover:text-indigo-700 rounded-xl font-semibold transition-colors text-center"
+          >
+            ← Retour aux chapitres
+          </Link>
+        </div>
       </div>
     </div>
   );

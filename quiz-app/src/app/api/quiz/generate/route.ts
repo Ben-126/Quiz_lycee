@@ -8,6 +8,8 @@ import { QUESTIONS_PAR_QUIZ } from "@/lib/constants";
 const RequestSchema = z.object({
   matiereSlug: z.string().min(1).max(100),
   chapitreSlug: z.string().min(1).max(100),
+  niveau: z.enum(["debutant", "intermediaire", "avance"]).optional(),
+  questionsRatees: z.array(z.string().max(500)).max(10).optional(),
 });
 
 const rateLimit = new Map<string, { count: number; resetAt: number }>();
@@ -54,7 +56,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Paramètres invalides." }, { status: 400 });
   }
 
-  const { matiereSlug, chapitreSlug } = parsed.data;
+  const { matiereSlug, chapitreSlug, niveau, questionsRatees } = parsed.data;
 
   if (!getMatiereBySlug(matiereSlug)) {
     return NextResponse.json({ error: "Matière introuvable." }, { status: 404 });
@@ -75,11 +77,23 @@ export async function POST(req: NextRequest) {
       const { chapitre } = getChapitreBySlug(matiereSlug, chapitreSlug)!;
       const competences = chapitre.competences.map((c) => c.titre).join(", ");
 
+      const niveauInstruction = niveau === "debutant"
+        ? "Les questions doivent être simples et accessibles, avec des notions fondamentales et des formulations claires."
+        : niveau === "avance"
+        ? "Les questions doivent être plus approfondies et exigeantes, testant la compréhension fine et l'application de concepts complexes."
+        : "Les questions doivent être de difficulté standard, adaptées au niveau Seconde.";
+
+      const revisionInstruction = questionsRatees && questionsRatees.length > 0
+        ? `\nCONTEXTE RÉVISION : L'élève a eu des difficultés sur ces questions lors du quiz précédent :\n${questionsRatees.map((q, i) => `${i + 1}. ${q}`).join("\n")}\nConçois des questions qui renforcent la compréhension de ces notions spécifiques.`
+        : "";
+
       const prompt = `Tu es un professeur expert pour la classe de Seconde en France.
 Génère exactement ${QUESTIONS_PAR_QUIZ} questions de quiz sur le chapitre suivant :
 - Matière : ${matiere.nom}
 - Chapitre : ${chapitre.titre}
 - Compétences ciblées : ${competences}
+
+Niveau de difficulté : ${niveauInstruction}${revisionInstruction}
 
 Génère un mélange de types : QCM (4 options), Vrai/Faux, et Réponse courte.
 Les questions doivent être précises, pédagogiquement correctes et adaptées au niveau Seconde.
