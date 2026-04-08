@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { genererQuizMock } from "@/lib/mock-quiz";
-import { getMatiereBySlug, getChapitreBySlug } from "@/data/programme-seconde";
+import { getMatiereBySlugAndNiveau, type Niveau } from "@/data/programmes";
 import { QuizSchema } from "@/lib/quiz-schema";
 import { QUESTIONS_PAR_QUIZ } from "@/lib/constants";
 
 const RequestSchema = z.object({
   matiereSlug: z.string().min(1).max(100),
   chapitreSlug: z.string().min(1).max(100),
+  niveauLycee: z.enum(["seconde", "premiere", "terminale"]).optional().default("seconde"),
   niveau: z.enum(["debutant", "intermediaire", "avance"]).optional(),
   questionsRatees: z.array(z.string().max(500)).max(10).optional(),
 });
@@ -56,15 +57,19 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Paramètres invalides." }, { status: 400 });
   }
 
-  const { matiereSlug, chapitreSlug, niveau, questionsRatees } = parsed.data;
+  const { matiereSlug, chapitreSlug, niveauLycee, niveau, questionsRatees } = parsed.data;
 
-  if (!getMatiereBySlug(matiereSlug)) {
+  const matiere = getMatiereBySlugAndNiveau(niveauLycee as Niveau, matiereSlug);
+  if (!matiere) {
     return NextResponse.json({ error: "Matière introuvable." }, { status: 404 });
   }
 
-  if (!getChapitreBySlug(matiereSlug, chapitreSlug)) {
+  const chapitre = matiere.chapitres.find((c) => c.slug === chapitreSlug);
+  if (!chapitre) {
     return NextResponse.json({ error: "Chapitre introuvable." }, { status: 404 });
   }
+
+  const niveauLabel = niveauLycee === "premiere" ? "Première" : niveauLycee === "terminale" ? "Terminale" : "Seconde";
 
   const apiKey = process.env.OPENAI_API_KEY;
 
@@ -72,22 +77,19 @@ export async function POST(req: NextRequest) {
     try {
       const { default: OpenAI } = await import("openai");
       const client = new OpenAI({ apiKey });
-
-      const matiere = getMatiereBySlug(matiereSlug)!;
-      const { chapitre } = getChapitreBySlug(matiereSlug, chapitreSlug)!;
       const competences = chapitre.competences.map((c) => c.titre).join(", ");
 
       const niveauInstruction = niveau === "debutant"
         ? "Les questions doivent être simples et accessibles, avec des notions fondamentales et des formulations claires."
         : niveau === "avance"
         ? "Les questions doivent être plus approfondies et exigeantes, testant la compréhension fine et l'application de concepts complexes."
-        : "Les questions doivent être de difficulté standard, adaptées au niveau Seconde.";
+        : `Les questions doivent être de difficulté standard, adaptées au niveau ${niveauLabel}.`;
 
       const revisionInstruction = questionsRatees && questionsRatees.length > 0
         ? `\nCONTEXTE RÉVISION : L'élève a eu des difficultés sur ces questions lors du quiz précédent :\n${questionsRatees.map((q, i) => `${i + 1}. ${q}`).join("\n")}\nConçois des questions qui renforcent la compréhension de ces notions spécifiques.`
         : "";
 
-      const prompt = `Tu es un professeur expert pour la classe de Seconde en France.
+      const prompt = `Tu es un professeur expert pour la classe de ${niveauLabel} en France.
 Génère exactement ${QUESTIONS_PAR_QUIZ} questions de quiz sur le chapitre suivant :
 - Matière : ${matiere.nom}
 - Chapitre : ${chapitre.titre}

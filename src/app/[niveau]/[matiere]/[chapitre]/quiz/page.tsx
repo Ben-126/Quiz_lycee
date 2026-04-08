@@ -54,6 +54,7 @@ export default async function QuizPage({ params }: Props) {
             matiereSlug={matiereSlug}
             chapitreSlug={chapitreSlug}
             titreChapitre={chapitre.titre}
+            niveauLycee={niveauSlug}
           />
         </div>
 
