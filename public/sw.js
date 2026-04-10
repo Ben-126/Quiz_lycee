@@ -44,7 +44,7 @@ async function verifierEtNotifier() {
     ? "Il te reste 1 quiz à faire pour atteindre ton objectif !"
     : `Il te reste ${etatObjectif.restant} quiz à faire pour atteindre ton objectif !`;
 
-  self.registration.showNotification("QuizLycée — Rappel de révision 📚", {
+  await self.registration.showNotification("QuizLycée — Rappel de révision 📚", {
     body: texte,
     icon: "/favicon.ico",
     badge: "/favicon.ico",
