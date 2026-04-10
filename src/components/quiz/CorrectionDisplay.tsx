@@ -1,5 +1,6 @@
 "use client";
 import type { Question } from "@/types";
+import { getParametres } from "@/lib/parametres";
 import ExplicationAvancee from "./ExplicationAvancee";
 
 interface CorrectionDisplayProps {
@@ -47,6 +48,7 @@ export default function CorrectionDisplay({
 }: CorrectionDisplayProps) {
   const libelleUser = getLibelleReponse(question, reponseUtilisateur);
   const libelleBonne = getLibelleBonneReponse(question);
+  const { explicationsAvanceesOuvertes } = getParametres();
 
   return (
     <div
@@ -88,7 +90,7 @@ export default function CorrectionDisplay({
 
       <ExplicationAvancee
         explicationAvancee={question.explicationAvancee}
-        defaultExpanded={!correcte}
+        defaultExpanded={!correcte || explicationsAvanceesOuvertes}
       />
 
       <button
