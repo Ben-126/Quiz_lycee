@@ -19,7 +19,6 @@ export default function ProgressionPage() {
   const [historique, setHistorique] = useState<EntreeHistorique[]>([]);
   const [performances, setPerformances] = useState<Record<string, PerformanceChapitre>>({});
   const [mounted, setMounted] = useState(false);
-  const [confirmEtape, setConfirmEtape] = useState<0 | 1 | 2>(0);
 
   useEffect(() => {
     setHistorique(getHistorique());
@@ -35,13 +34,6 @@ export default function ProgressionPage() {
     }
   }, [niveauActif]);
 
-  const reinitialiserProgression = () => {
-    localStorage.removeItem("quiz-performances");
-    localStorage.removeItem("quiz-history");
-    setHistorique([]);
-    setPerformances({});
-    setConfirmEtape(0);
-  };
 
   const niveauInfo = NIVEAUX.find((n) => n.slug === niveauActif)!;
   const matiereActive = niveauInfo.matieres.find((m) => m.slug === matiereActiveSlug);
@@ -204,74 +196,15 @@ export default function ProgressionPage() {
         )}
 
         <div className="flex justify-center pt-2 pb-4">
-          <button
-            onClick={() => setConfirmEtape(1)}
-            className="text-xs text-red-400 hover:text-red-600 transition-colors underline underline-offset-2"
+          <Link
+            href="/parametres"
+            className="text-xs text-gray-400 hover:text-indigo-500 transition-colors underline underline-offset-2"
           >
-            Réinitialiser toute la progression
-          </button>
+            ⚙️ Paramètres et réinitialisation
+          </Link>
         </div>
 
       </main>
-
-      {/* Modal de confirmation — étape 1 */}
-      {confirmEtape === 1 && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-4">
-          <div className="bg-white rounded-2xl shadow-xl p-6 max-w-sm w-full space-y-4">
-            <p className="text-2xl text-center">⚠️</p>
-            <h2 className="text-base font-bold text-gray-800 text-center">
-              Réinitialiser la progression ?
-            </h2>
-            <p className="text-sm text-gray-500 text-center">
-              Tous tes scores, badges et l&apos;historique des quiz seront supprimés définitivement.
-            </p>
-            <div className="flex gap-3 pt-1">
-              <button
-                onClick={() => setConfirmEtape(0)}
-                className="flex-1 py-2.5 rounded-xl border-2 border-gray-200 text-sm font-semibold text-gray-600 hover:border-gray-300 transition-colors"
-              >
-                Annuler
-              </button>
-              <button
-                onClick={() => setConfirmEtape(2)}
-                className="flex-1 py-2.5 rounded-xl bg-red-500 hover:bg-red-600 text-sm font-semibold text-white transition-colors"
-              >
-                Oui, continuer
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Modal de confirmation — étape 2 */}
-      {confirmEtape === 2 && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
-          <div className="bg-white rounded-2xl shadow-xl p-6 max-w-sm w-full space-y-4">
-            <p className="text-2xl text-center">🗑️</p>
-            <h2 className="text-base font-bold text-red-600 text-center">
-              Êtes-vous vraiment sûr ?
-            </h2>
-            <p className="text-sm text-gray-500 text-center">
-              Cette action est <span className="font-semibold text-gray-700">irréversible</span>.
-              Il n&apos;y a pas de retour en arrière possible.
-            </p>
-            <div className="flex gap-3 pt-1">
-              <button
-                onClick={() => setConfirmEtape(0)}
-                className="flex-1 py-2.5 rounded-xl border-2 border-gray-200 text-sm font-semibold text-gray-600 hover:border-gray-300 transition-colors"
-              >
-                Annuler
-              </button>
-              <button
-                onClick={reinitialiserProgression}
-                className="flex-1 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-sm font-semibold text-white transition-colors"
-              >
-                Tout effacer
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
