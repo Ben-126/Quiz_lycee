@@ -5,6 +5,7 @@ import QuestionCard, { TEMPS_MAX_PAR_TYPE } from "./QuestionCard";
 import CorrectionDisplay from "./CorrectionDisplay";
 import ScoreDisplay from "./ScoreDisplay";
 import ModeSelector from "./ModeSelector";
+import CoachIA from "@/components/coach/CoachIA";
 import {
   getPerformance,
   getNiveau,
@@ -374,6 +375,10 @@ export default function QuizRunner({ matiereSlug, chapitreSlug, titreChapitre, n
   }
 
   const questionCourante = questions[questionIndex];
+  const questionCourtanteTexte =
+    (etat === "question" || etat === "correction") && questionCourante
+      ? questionCourante.question
+      : undefined;
 
   return (
     <div className="space-y-4">
@@ -458,6 +463,16 @@ export default function QuizRunner({ matiereSlug, chapitreSlug, titreChapitre, n
             estDerniere={questionIndex + 1 >= questions.length}
           />
         </div>
+      )}
+
+      {/* Coach IA flottant — disponible pendant le quiz en mode entraînement */}
+      {modeQuiz === "entrainement" && (etat === "question" || etat === "correction") && (
+        <CoachIA
+          matiere={matiereName}
+          chapitre={titreChapitre}
+          niveauLycee={niveauLycee}
+          questionCourante={questionCourtanteTexte}
+        />
       )}
     </div>
   );
