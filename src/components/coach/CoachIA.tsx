@@ -81,11 +81,10 @@ export default function CoachIA({
         return;
       }
 
-      // Détecter si c'est une réponse locale (non-streaming) ou streaming OpenAI
-      const contentType = res.headers.get("Content-Type") ?? "";
-      const isStreaming = res.body && contentType.includes("text/plain");
+      const estLocal = res.headers.get("X-Coach-Mode") === "local";
+      if (estLocal) setModeLocal(true);
 
-      if (isStreaming && res.body) {
+      if (res.body) {
         const reader = res.body.getReader();
         const decoder = new TextDecoder();
         let reponse = "";
@@ -98,19 +97,8 @@ export default function CoachIA({
           setReponseEnCours(reponse);
         }
 
-        // Détecter si c'est une réponse locale (contient le marqueur)
-        if (reponse.includes("Réponse générée localement")) {
-          setModeLocal(true);
-        }
-
         setMessages((prev) => [...prev, { role: "assistant", content: reponse }]);
         setReponseEnCours("");
-      } else {
-        const texteReponse = await res.text();
-        if (texteReponse.includes("Réponse générée localement")) {
-          setModeLocal(true);
-        }
-        setMessages((prev) => [...prev, { role: "assistant", content: texteReponse }]);
       }
     } catch {
       setMessages((prev) => [
@@ -253,6 +241,15 @@ export default function CoachIA({
 
             <div ref={messagesEndRef} />
           </div>
+
+          {/* Note mode local */}
+          {modeLocal && (
+            <div className="px-3 pb-1">
+              <p className="text-[10px] text-gray-400 text-center">
+                Mode local · <a href="#" className="underline" onClick={(e) => e.preventDefault()}>Configurer une clé API</a> pour un coach IA complet
+              </p>
+            </div>
+          )}
 
           {/* Zone de saisie */}
           <div className="border-t border-gray-100 p-3 flex gap-2 items-end">

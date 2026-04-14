@@ -148,6 +148,5 @@ function construireReponse(messages: Message[], ctx: CoachContextLocal): string 
 }
 
 export function repondreLocalement(messages: Message[], ctx: CoachContextLocal): string {
-  const reponse = construireReponse(messages, ctx);
-  return reponse + "\n\n(Réponse générée localement · Configure une clé API pour un coach IA complet)";
+  return construireReponse(messages, ctx);
 }

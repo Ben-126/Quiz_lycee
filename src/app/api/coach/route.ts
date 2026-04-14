@@ -67,7 +67,7 @@ export async function POST(req: NextRequest) {
   if (!apiKey) {
     const reponse = repondreLocalement(messages, context);
     return new Response(reponse, {
-      headers: { "Content-Type": "text/plain; charset=utf-8" },
+      headers: { "Content-Type": "text/plain; charset=utf-8", "X-Coach-Mode": "local" },
     });
   }
 
@@ -141,7 +141,7 @@ Règles :
     // Fallback local si OpenAI échoue
     const reponse = repondreLocalement(messages, context);
     return new Response(reponse, {
-      headers: { "Content-Type": "text/plain; charset=utf-8" },
+      headers: { "Content-Type": "text/plain; charset=utf-8", "X-Coach-Mode": "local" },
     });
   }
 }
