@@ -37,7 +37,7 @@ export interface BadgeInfo {
 export const BADGES_GENERAUX: BadgeInfo[] = [
   { id: "premier-pas",      nom: "Premier Pas",        description: "Terminer son 1er quiz",           emoji: "🎯"  },
   { id: "dizaine",          nom: "Décuplé",             description: "Compléter 10 quiz",               emoji: "🔟"  },
-  { id: "cinquantaine",     nom: "Centurion",           description: "Compléter 50 quiz",               emoji: "🏅"  },
+  { id: "cinquantaine",     nom: "Cinquantaine",        description: "Compléter 50 quiz",               emoji: "🏅"  },
   { id: "score-parfait",    nom: "Score Parfait",       description: "Obtenir 100% une fois",           emoji: "⭐"  },
   { id: "perfectionniste",  nom: "Perfectionniste",     description: "Obtenir 3 scores parfaits",       emoji: "💎"  },
   { id: "serie-3",          nom: "Série ×3",            description: "Jouer 3 jours de suite",          emoji: "🔥"  },
@@ -109,8 +109,8 @@ function getDateAujourdhuiISO(): string {
 }
 
 function hierISO(aujourd: string): string {
-  const d = new Date(aujourd);
-  d.setDate(d.getDate() - 1);
+  const d = new Date(aujourd + "T00:00:00Z");
+  d.setUTCDate(d.getUTCDate() - 1);
   return d.toISOString().slice(0, 10);
 }
 
@@ -172,11 +172,11 @@ function mettreAJourStreak(profil: ProfilGamification, aujourd: string): number 
 // ─── Badges ────────────────────────────────────────────────────────────────────
 
 function verifierNouveauxBadges(
-  profil: ProfilGamification,
+  profilCourant: ProfilGamification,
   matiereSlug: string,
   nouveauXPTotal: number,
 ): string[] {
-  const deja = new Set(profil.badgesDebloques.map((b) => b.id));
+  const deja = new Set(profilCourant.badgesDebloques.map((b) => b.id));
   const nouveaux: string[] = [];
 
   const performances = getToutesPerformances();
@@ -195,9 +195,9 @@ function verifierNouveauxBadges(
   check("cinquantaine",    totalQuiz >= 50);
   check("score-parfait",   scoreParfaitCount >= 1);
   check("perfectionniste", scoreParfaitCount >= 3);
-  check("serie-3",         profil.streakJours >= 3);
-  check("serie-7",         profil.streakJours >= 7);
-  check("assidu",          profil.streakJours >= 30);
+  check("serie-3",         profilCourant.streakJours >= 3);
+  check("serie-7",         profilCourant.streakJours >= 7);
+  check("assidu",          profilCourant.streakJours >= 30);
   check("niveau-5",        niveauActuel.numero >= 5);
 
   // Badges matière
@@ -237,7 +237,7 @@ export function enregistrerQuizGamification(params: {
 
   // Streak
   const nouveauStreak = mettreAJourStreak(profil, aujourd);
-  const streakActif   = profil.dernierQuizDate === hierISO(aujourd); // bonus XP si nouvel jour avec streak
+  const streakActif   = nouveauStreak > 1; // bonus XP si streak actif (joué hier ou suite de jours)
 
   // Reset quotidien si nouveau jour
   const estNouveauJour   = profil.dernierQuizDate !== aujourd;
