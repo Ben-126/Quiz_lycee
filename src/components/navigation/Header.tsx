@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import XPBar from "@/components/gamification/XPBar";
 
 interface HeaderProps {
   titre?: string;
@@ -43,6 +44,7 @@ export default function Header({ titre, showBack, backHref }: HeaderProps) {
           </>
         )}
         <div className="ml-auto flex items-center gap-1">
+          <XPBar />
           <Link
             href="/progression"
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-indigo-600 hover:bg-indigo-50 transition-colors"
