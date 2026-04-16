@@ -6,7 +6,6 @@ import { NIVEAUX } from "@/data/programmes";
 
 interface XPToastProps {
   resultat: ResultatGamification;
-  matiereSlug: string;
 }
 
 function getBadgeNom(id: string): string {
@@ -21,7 +20,7 @@ function getBadgeNom(id: string): string {
   return id;
 }
 
-export default function XPToast({ resultat, matiereSlug: _matiereSlug }: XPToastProps) {
+export default function XPToast({ resultat }: XPToastProps) {
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {

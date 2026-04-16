@@ -17,6 +17,15 @@ export default function XPBar() {
     setMounted(true);
   }, []);
 
+  useEffect(() => {
+    const handler = () => {
+      const profil = getProfilGamification();
+      setXpTotal(profil.xpTotal);
+    };
+    window.addEventListener("gamification-updated", handler);
+    return () => window.removeEventListener("gamification-updated", handler);
+  }, []);
+
   if (!mounted || xpTotal === 0) return null;
 
   const niveau      = getNiveauFromXP(xpTotal);

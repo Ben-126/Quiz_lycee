@@ -99,6 +99,7 @@ export function getProfilGamification(): ProfilGamification {
 function saveProfilGamification(profil: ProfilGamification): void {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(profil));
+    window.dispatchEvent(new CustomEvent("gamification-updated"));
   } catch {}
 }
 

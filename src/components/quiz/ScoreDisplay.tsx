@@ -82,7 +82,7 @@ export default function ScoreDisplay({
   return (
     <>
       {resultatGamification && resultatGamification.xpGagne > 0 && (
-        <XPToast resultat={resultatGamification} matiereSlug={matiereSlug} />
+        <XPToast resultat={resultatGamification} />
       )}
       <div className="text-center space-y-6" data-testid="score-display">
       {/* En-tête mode contrôle */}

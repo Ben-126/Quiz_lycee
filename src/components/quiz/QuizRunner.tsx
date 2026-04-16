@@ -168,7 +168,7 @@ export default function QuizRunner({ matiereSlug, chapitreSlug, titreChapitre, n
     });
     setResultatGamification(resultatGami);
     setEtat("termine");
-  }, [questions, matiereSlug, chapitreSlug, niveauLycee, matiereName, titreChapitre]);
+  }, [questions, matiereSlug, chapitreSlug, niveauLycee, matiereName, titreChapitre, modeQuiz]);
 
   // Handle contrôle timer expiry
   useEffect(() => {
