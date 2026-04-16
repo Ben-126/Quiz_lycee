@@ -20,6 +20,12 @@ export default function HomePage() {
       <main className="flex-1 max-w-4xl mx-auto w-full px-4 py-6">
         <BanniereObjectif />
         <div className="text-center mb-8">
+          {/* Logo PNG — icône cerveau */}
+          <div className="flex justify-center mb-4">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo.png" alt="Révioria Academy" className="w-28 h-28 sm:w-36 sm:h-36 object-contain" />
+          </div>
+          {/* Logo texte SVG */}
           <h1 className="flex items-center justify-center mb-2">
             <span className="font-serif font-light tracking-[0.14em] text-5xl sm:text-6xl text-[#0F172A]">Révioria</span>
             <span className="inline-block w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-[#2563EB] ml-2 sm:ml-3 self-end mb-2 sm:mb-3 shrink-0" />

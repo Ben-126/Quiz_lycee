@@ -34,9 +34,11 @@ export default function Header({ titre, showBack, backHref }: HeaderProps) {
             </svg>
           </button>
         )}
-        <Link href="/" aria-label="Révioria — Accueil" className="flex items-center hover:opacity-75 transition-opacity">
+        <Link href="/" aria-label="Révioria — Accueil" className="flex items-center gap-2 hover:opacity-75 transition-opacity">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.png" alt="" aria-hidden="true" className="w-9 h-9 object-contain shrink-0" />
           <span className="font-serif font-light tracking-[0.12em] text-xl text-[#0F172A]">Révioria</span>
-          <span className="inline-block w-[7px] h-[7px] rounded-full bg-[#2563EB] ml-[5px] self-end mb-[4px] shrink-0" />
+          <span className="inline-block w-[7px] h-[7px] rounded-full bg-[#2563EB] ml-[3px] self-end mb-[4px] shrink-0" />
         </Link>
         {titre && (
           <>
