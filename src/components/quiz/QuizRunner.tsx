@@ -13,6 +13,8 @@ import {
   type NiveauDifficulte,
 } from "@/lib/performance";
 import { getParametres } from "@/lib/parametres";
+import { enregistrerQuizGamification } from "@/lib/gamification";
+import type { ResultatGamification } from "@/types";
 
 type EtatQuiz = "selection_mode" | "chargement" | "question" | "verification" | "correction" | "termine" | "erreur";
 
@@ -80,6 +82,7 @@ export default function QuizRunner({ matiereSlug, chapitreSlug, titreChapitre, n
   const [niveau, setNiveau] = useState<NiveauDifficulte>("intermediaire");
   const [modeRevision, setModeRevision] = useState<ModeRevision>({ actif: false, questionsRatees: [] });
   const [tempsControle, setTempsControle] = useState(0);
+  const [resultatGamification, setResultatGamification] = useState<ResultatGamification | null>(null);
   const debutQuestionRef = useRef<number>(0);
 
   // Countdown timer for contrôle mode
@@ -157,6 +160,13 @@ export default function QuizRunner({ matiereSlug, chapitreSlug, titreChapitre, n
       matiereName,
       chapitreNom: titreChapitre,
     });
+    const resultatGami = enregistrerQuizGamification({
+      matiereSlug,
+      chapitreSlug,
+      scorePourcentage: pourcentage,
+      modeControle: modeQuiz === "controle",
+    });
+    setResultatGamification(resultatGami);
     setEtat("termine");
   }, [questions, matiereSlug, chapitreSlug, niveauLycee, matiereName, titreChapitre]);
 
@@ -355,6 +365,7 @@ export default function QuizRunner({ matiereSlug, chapitreSlug, titreChapitre, n
         modeRevision={modeRevision.actif}
         competences={competences}
         modeControle={modeQuiz === "controle"}
+        resultatGamification={resultatGamification}
         questions={questions}
         reponses={reponses}
         onRecommencer={() => {
