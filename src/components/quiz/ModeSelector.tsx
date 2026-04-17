@@ -16,7 +16,7 @@ export default function ModeSelector({ titreChapitre, onSelectMode }: ModeSelect
         <h2 className="text-xl font-bold text-gray-800">Choisir un mode</h2>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-3">
         {/* Mode Entraînement */}
         <button
           onClick={() => onSelectMode("entrainement")}
@@ -59,6 +59,25 @@ export default function ModeSelector({ titreChapitre, onSelectMode }: ModeSelect
             </span>
             <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-red-100 text-red-700">
               Chronomètre
+            </span>
+          </div>
+        </button>
+        {/* Mode Chrono */}
+        <button
+          onClick={() => onSelectMode("chrono")}
+          data-testid="btn-mode-chrono"
+          className="group relative flex flex-col items-center text-center gap-3 p-6 rounded-2xl border-2 border-yellow-300 hover:border-yellow-400 bg-white hover:bg-yellow-50 transition-all duration-200 shadow-sm hover:shadow-md"
+        >
+          <span className="text-4xl">⚡</span>
+          <div>
+            <p className="font-bold text-gray-800 text-base">Chrono</p>
+            <p className="text-xs text-gray-500 mt-1 leading-relaxed">
+              Course contre la montre · Réponds vite pour gagner plus de points !
+            </p>
+          </div>
+          <div className="flex flex-wrap justify-center gap-1 mt-1">
+            <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-yellow-100 text-yellow-700">
+              30s par question
             </span>
           </div>
         </button>

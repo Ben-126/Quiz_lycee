@@ -5,6 +5,7 @@ import QuestionCard, { TEMPS_MAX_PAR_TYPE } from "./QuestionCard";
 import CorrectionDisplay from "./CorrectionDisplay";
 import ScoreDisplay from "./ScoreDisplay";
 import ModeSelector from "./ModeSelector";
+import TimerBar from "./TimerBar";
 import CoachIA from "@/components/coach/CoachIA";
 import {
   getPerformance,
@@ -215,6 +216,18 @@ export default function QuizRunner({ matiereSlug, chapitreSlug, titreChapitre, n
     const question = questions[questionIndex];
     const elapsedMs = Date.now() - debutQuestionRef.current;
     const tempsMaxMs = TEMPS_MAX_PAR_TYPE[question.type];
+
+    // Mode chrono : comme entraînement mais avec TimerBar visible
+    if (modeQuiz === "chrono") {
+      const correcte = verifierReponseLocale(question, reponse);
+      const niveauCorrection: NiveauCorrection = correcte ? "correct" : "incorrect";
+      const points = calculerPoints(niveauCorrection, elapsedMs, tempsMaxMs);
+      const nouvelleReponse: ReponseUtilisateur = { questionIndex, reponse, correcte, niveauCorrection, tempsMs: elapsedMs, pointsObtenus: points };
+      setReponses((prev) => [...prev, nouvelleReponse]);
+      setDerniereReponse({ reponse, correcte, niveauCorrection });
+      setEtat("correction");
+      return;
+    }
 
     // Mode contrôle: réponse locale immédiate, pas de correction intermédiaire
     if (modeQuiz === "controle") {
@@ -442,6 +455,14 @@ export default function QuizRunner({ matiereSlug, chapitreSlug, titreChapitre, n
           <div className="w-8 h-8 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin" />
           <p className="text-gray-500 text-sm">Correction en cours...</p>
         </div>
+      )}
+
+      {modeQuiz === "chrono" && etat === "question" && (
+        <TimerBar
+          dureeSecondes={30}
+          onExpire={handleTimeUp}
+          reset={questionIndex}
+        />
       )}
 
       {etat === "question" && (
