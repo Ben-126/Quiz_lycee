@@ -20,6 +20,8 @@ credentials.*
 # Dossiers sensibles
 secrets/
 private/
+supabase/*.env
+supabase/
 
 # Systèmes d'exploitation
 .DS_Store
