@@ -13,6 +13,7 @@ import {
   sauvegarderPerformance,
   type NiveauDifficulte,
 } from "@/lib/performance";
+import { ajouterCarteRevision } from "@/lib/revision-espacee";
 import { getParametres } from "@/lib/parametres";
 import { enregistrerQuizGamification } from "@/lib/gamification";
 import type { ResultatGamification } from "@/types";
@@ -161,6 +162,16 @@ export default function QuizRunner({ matiereSlug, chapitreSlug, titreChapitre, n
       matiereName,
       chapitreNom: titreChapitre,
     });
+
+    // Alimenter le système de révision espacée avec les questions incorrectes
+    reponsesFinales
+      .filter((r) => r.niveauCorrection === "incorrect")
+      .forEach((r) => {
+        const q = questions[r.questionIndex];
+        if (q) {
+          ajouterCarteRevision(q, matiereSlug, chapitreSlug, niveauLycee, matiereName, titreChapitre);
+        }
+      });
     const resultatGami = enregistrerQuizGamification({
       matiereSlug,
       chapitreSlug,

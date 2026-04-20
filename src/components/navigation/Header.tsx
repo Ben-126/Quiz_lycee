@@ -9,11 +9,13 @@ import { setupOnlineListener } from "@/lib/sync";
 import AuthModal from "@/components/auth/AuthModal";
 import ClochNotif from "@/components/social/ClochNotif";
 import XPBar from "@/components/gamification/XPBar";
+import { getStatsRevision } from "@/lib/revision-espacee";
 import type { User } from "@supabase/supabase-js";
 
 export default function Header() {
   const [user, setUser] = useState<User | null>(null);
   const [showAuth, setShowAuth] = useState(false);
+  const [cartesAReviser, setCartesAReviser] = useState(0);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => setUser(user));
@@ -23,6 +25,9 @@ export default function Header() {
     });
 
     const cleanup = setupOnlineListener();
+
+    // Charger le nombre de cartes à réviser
+    setCartesAReviser(getStatsRevision().cartesAujourdhui);
 
     return () => {
       subscription.unsubscribe();
@@ -52,6 +57,19 @@ export default function Header() {
           >
             <span>📈</span>
             <span className="hidden sm:inline">Progression</span>
+          </Link>
+
+          <Link
+            href="/revision"
+            className="relative text-sm text-gray-600 hover:text-indigo-600 font-medium px-3 py-1.5 rounded-lg hover:bg-indigo-50 transition-colors flex items-center gap-1.5"
+          >
+            <span>🧠</span>
+            <span className="hidden sm:inline">Révision</span>
+            {cartesAReviser > 0 && (
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                {cartesAReviser > 9 ? "9+" : cartesAReviser}
+              </span>
+            )}
           </Link>
 
           <Link
