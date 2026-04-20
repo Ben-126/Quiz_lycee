@@ -53,18 +53,11 @@ Règles :
 
 function fallbackSansApiKey(): ScanResultat {
   return {
-    correction: "Correction IA indisponible — aucune clé API configurée.",
-    note: "Mode hors ligne",
-    explication: "Pour corriger des exercices par IA, ajoutez OPENAI_API_KEY dans les variables d'environnement Vercel (ou dans .env.local en développement).",
-    etapes: [
-      "Aller sur platform.openai.com pour obtenir une clé API",
-      "Dans Vercel : Settings → Environment Variables → ajouter OPENAI_API_KEY",
-      "Redéployer le projet",
-    ],
-    conseils: [
-      "Le modèle utilisé est gpt-4o-mini, peu coûteux",
-      "En développement local, créez un fichier .env.local avec OPENAI_API_KEY=sk-...",
-    ],
+    correction: "Le service de correction est temporairement indisponible. Réessaie dans quelques instants.",
+    note: "Service indisponible",
+    explication: "Notre IA de correction rencontre un problème technique. Cela devrait être résolu rapidement.",
+    etapes: [],
+    conseils: ["Réessaie dans quelques minutes", "Si le problème persiste, contacte le support"],
   };
 }
 
