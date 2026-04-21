@@ -6,6 +6,7 @@ import StatsMatiere from "@/components/progression/StatsMatiere";
 import GraphiqueChapitres from "@/components/progression/GraphiqueChapitres";
 import GraphiqueEvolution from "@/components/progression/GraphiqueEvolution";
 import HistoriqueQuiz from "@/components/progression/HistoriqueQuiz";
+import PredictionNote from "@/components/progression/PredictionNote";
 import BadgeGrid from "@/components/gamification/BadgeGrid";
 import { NIVEAUX, type Niveau } from "@/data/programmes";
 import { getToutesPerformances, type PerformanceChapitre } from "@/lib/performance";
@@ -232,6 +233,12 @@ export default function ProgressionPage() {
         {matiereActive && (
           <div className="space-y-4">
             <StatsMatiere matiereSlug={matiereActiveSlug} chapitres={matiereActive.chapitres} />
+
+            <PredictionNote
+              matiereSlug={matiereActiveSlug}
+              chapitres={matiereActive.chapitres}
+              performances={performances}
+            />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
