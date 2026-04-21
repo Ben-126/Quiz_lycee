@@ -23,7 +23,7 @@ function normaliserMot(mot: string): string {
 function calculerSimilarite(attendu: string, transcrit: string): number {
   const mots1 = attendu.split(/\s+/).map(normaliserMot).filter(Boolean);
   const mots2 = transcrit.split(/\s+/).map(normaliserMot).filter(Boolean);
-  if (mots1.length === 0) return 1;
+  if (mots1.length === 0) return 0;
   let corrects = 0;
   for (let i = 0; i < Math.min(mots1.length, mots2.length); i++) {
     if (mots1[i] === mots2[i]) corrects++;

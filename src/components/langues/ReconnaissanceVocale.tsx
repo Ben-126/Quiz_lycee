@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect, useRef, useCallback } from "react";
 import type { SpeechRecognitionInstance, SpeechRecognitionResultEvent, SpeechRecognitionErrorEvent } from "./speech-types";
-import "./speech-types";
 
 const LANGUES = [
   { code: "en-GB", nom: "Anglais", emoji: "🇬🇧" },

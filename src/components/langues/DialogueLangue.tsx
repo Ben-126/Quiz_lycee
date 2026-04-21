@@ -1,7 +1,6 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import type { SpeechRecognitionInstance, SpeechRecognitionResultEvent } from "./speech-types";
-import "./speech-types";
 
 const LANGUES = [
   { code: "en", bcp47: "en-GB", nom: "Anglais", emoji: "🇬🇧" },
@@ -47,6 +46,7 @@ export default function DialogueLangue() {
     setMessages([]);
     setInput("");
     setModeLocal(false);
+    setReponseEnCours("");
     if (ecouteVocale) arreterEcoute();
   };
 
