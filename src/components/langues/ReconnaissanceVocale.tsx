@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 
 const LANGUES = [
   { code: "en-GB", nom: "Anglais", emoji: "🇬🇧" },
@@ -41,11 +41,21 @@ export default function ReconnaissanceVocale() {
   const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
 
   useEffect(() => {
+    const supported = !!(window.SpeechRecognition ?? window.webkitSpeechRecognition);
+    if (!supported) setSupporte(false);
+  }, []);
+
+  const arreter = useCallback(() => {
+    recognitionRef.current?.stop();
+    recognitionRef.current = null;
+    setEnCours(false);
+  }, []);
+
+  const demarrer = () => {
     const API = window.SpeechRecognition ?? window.webkitSpeechRecognition;
-    if (!API) {
-      setSupporte(false);
-      return;
-    }
+    if (!API) return;
+
+    // Nouvelle instance à chaque démarrage
     const rec = new API();
     rec.continuous = true;
     rec.interimResults = true;
@@ -62,25 +72,12 @@ export default function ReconnaissanceVocale() {
       if (final) setTranscriptionFinale((prev) => prev + (prev ? " " : "") + final.trim());
       setTranscriptionVive(interim);
     };
-    rec.onerror = () => setEnCours(false);
-    rec.onend = () => { setEnCours(false); setTranscriptionVive(""); };
+    rec.onerror = () => { recognitionRef.current = null; setEnCours(false); };
+    rec.onend = () => { recognitionRef.current = null; setEnCours(false); setTranscriptionVive(""); };
 
     recognitionRef.current = rec;
-  }, [langue]);
-
-  const demarrer = () => {
-    const rec = recognitionRef.current;
-    if (!rec) return;
-    setTranscriptionFinale("");
-    setTranscriptionVive("");
-    rec.lang = langue;
     rec.start();
     setEnCours(true);
-  };
-
-  const arreter = () => {
-    recognitionRef.current?.stop();
-    setEnCours(false);
   };
 
   const changerLangue = (code: string) => {

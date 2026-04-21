@@ -73,6 +73,8 @@ export default function DialogueLangue() {
   const demarrerEcoute = () => {
     const API = window.SpeechRecognition ?? window.webkitSpeechRecognition;
     if (!API) return;
+
+    // Nouvelle instance à chaque écoute
     const rec = new API();
     rec.continuous = false;
     rec.interimResults = false;
@@ -82,8 +84,8 @@ export default function DialogueLangue() {
       const texte = event.results[0]?.[0]?.transcript ?? "";
       if (texte) setInput((prev) => prev + (prev ? " " : "") + texte);
     };
-    rec.onerror = () => setEcouteVocale(false);
-    rec.onend = () => setEcouteVocale(false);
+    rec.onerror = () => { recognitionRef.current = null; setEcouteVocale(false); };
+    rec.onend = () => { recognitionRef.current = null; setEcouteVocale(false); };
 
     recognitionRef.current = rec;
     rec.start();
@@ -92,6 +94,7 @@ export default function DialogueLangue() {
 
   const arreterEcoute = () => {
     recognitionRef.current?.stop();
+    recognitionRef.current = null;
     setEcouteVocale(false);
   };
 
