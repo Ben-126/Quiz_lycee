@@ -95,6 +95,11 @@ export interface ProfilGamification {
   badgesDebloques: BadgeDebloque[];
   xpDuJour: number;          // XP cumulés aujourd'hui (plafond 150)
   quizXpDuJour: string[];    // "matiereSlug/chapitreSlug" ayant déjà rapporté XP aujourd'hui
+  gelsRestants: number;      // 0-3, gels disponibles ce mois
+  gelsUtilises: number;      // gels utilisés ce mois (pour affichage historique)
+  dateDerniereRechargeGels: string | null; // "YYYY-MM" (ex: "2026-04")
+  joursJoues: string[];      // dates "YYYY-MM-DD" où un quiz a été fait (calendrier)
+  joursGeles: string[];      // dates "YYYY-MM-DD" où un gel a été utilisé automatiquement
 }
 
 export interface ResultatGamification {
@@ -151,7 +156,13 @@ export interface ResultatDefi {
   profil?: ProfilPublic;
 }
 
-export type TypeNotification = "friend_request" | "challenge_received" | "challenge_completed";
+export type TypeNotification =
+  | "friend_request"
+  | "challenge_received"
+  | "challenge_completed"
+  | "streak_rappel"
+  | "streak_perdu"
+  | "streak_gel_utilise";
 
 export interface Notification {
   id: string;
