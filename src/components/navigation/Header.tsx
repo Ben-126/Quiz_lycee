@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { supabase } from "@/lib/supabase";
 import { deconnecter } from "@/lib/auth";
 import { setupOnlineListener } from "@/lib/sync";
@@ -10,16 +11,6 @@ import ClochNotif from "@/components/social/ClochNotif";
 import XPBar from "@/components/gamification/XPBar";
 import { getStatsRevision } from "@/lib/revision-espacee";
 import type { User } from "@supabase/supabase-js";
-
-function LogoIcon({ size = 22 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M16 4 L18.5 13.5 L28 16 L18.5 18.5 L16 28 L13.5 18.5 L4 16 L13.5 13.5 Z" fill="#4D5EE8" />
-      <circle cx="23" cy="9" r="2.5" fill="#EF6E5A" />
-      <circle cx="9" cy="23" r="2" fill="#3DD6BF" />
-    </svg>
-  );
-}
 
 export default function Header() {
   const [user, setUser] = useState<User | null>(null);
@@ -90,7 +81,18 @@ export default function Header() {
           textDecoration: "none",
           flexShrink: 0,
         }}>
-          <LogoIcon size={22} />
+          <div style={{
+            background: "rgba(255,255,255,0.9)",
+            borderRadius: "var(--r-sm)",
+            width: 30,
+            height: 30,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            overflow: "hidden",
+          }}>
+            <Image src="/logo-revioria.png" alt="Révioria" width={26} height={26} style={{ objectFit: "contain" }} />
+          </div>
           <span style={{ fontFamily: "var(--f-head)", fontWeight: 900, fontSize: "1rem", color: "var(--text)" }}>
             Révioria
           </span>

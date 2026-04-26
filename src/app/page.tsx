@@ -2,15 +2,24 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
-/* ── Logo SVG inline ─────────────────────────────────────── */
-function LogoIcon({ size = 28 }: { size?: number }) {
+/* ── Logo Révioria ───────────────────────────────────────── */
+function LogoImg({ size = 28 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M16 4 L18.5 13.5 L28 16 L18.5 18.5 L16 28 L13.5 18.5 L4 16 L13.5 13.5 Z" fill="#4D5EE8" />
-      <circle cx="23" cy="9" r="2.5" fill="#EF6E5A" />
-      <circle cx="9" cy="23" r="2" fill="#3DD6BF" />
-    </svg>
+    <div style={{
+      background: "rgba(255,255,255,0.9)",
+      borderRadius: "var(--r-sm)",
+      width: size,
+      height: size,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      overflow: "hidden",
+      flexShrink: 0,
+    }}>
+      <Image src="/logo-revioria.png" alt="Révioria" width={size - 4} height={size - 4} style={{ objectFit: "contain" }} />
+    </div>
   );
 }
 
@@ -154,7 +163,7 @@ export default function LandingPage() {
       }}>
         {/* Logo */}
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <LogoIcon size={24} />
+          <LogoImg size={24} />
           <span style={{ fontFamily: "var(--f-head)", fontWeight: 900, fontSize: "1rem", color: "var(--text)" }}>Révioria</span>
         </div>
 
@@ -653,7 +662,7 @@ export default function LandingPage() {
           gap: 16,
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <LogoIcon size={20} />
+            <LogoImg size={20} />
             <span style={{ fontFamily: "var(--f-head)", fontWeight: 900, fontSize: "0.9rem", color: "var(--text2)" }}>Révioria</span>
           </div>
 
