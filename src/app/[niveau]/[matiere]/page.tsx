@@ -24,27 +24,56 @@ export default async function MatierePage({ params }: Props) {
   if (!matiere) notFound();
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div style={{ background: "var(--bg)", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <Header />
-      <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-6">
-        <div className="flex items-center gap-3 mb-2">
-          <div className={`${matiere.couleur} rounded-xl p-3`}>
-            <span className="text-3xl">{matiere.emoji}</span>
+      <main style={{ flex: 1, maxWidth: 720, margin: "0 auto", width: "100%", padding: "24px 24px 48px" }}>
+
+        {/* En-tête matière */}
+        <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 8 }}>
+          <div className={matiere.couleur} style={{ borderRadius: "var(--r-md)", padding: "10px 12px", flexShrink: 0, opacity: 0.9 }}>
+            <span style={{ fontSize: "1.8rem" }}>{matiere.emoji}</span>
           </div>
           <div>
-            <p className="text-xs text-gray-400 font-medium uppercase tracking-wide">
+            <p style={{
+              fontFamily: "var(--f-head)",
+              fontWeight: 700,
+              fontSize: "0.72rem",
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              color: "var(--text3)",
+              marginBottom: 2,
+            }}>
               {niveauInfo.emoji} {niveauInfo.label}
             </p>
-            <h1 className="text-xl font-bold text-gray-800">{matiere.nom}</h1>
-            <p className="text-sm text-gray-500">{matiere.chapitres.length} chapitres disponibles</p>
+            <h1 style={{
+              fontFamily: "var(--f-head)",
+              fontWeight: 900,
+              fontSize: "1.3rem",
+              color: "var(--text)",
+              lineHeight: 1.2,
+            }}>
+              {matiere.nom}
+            </h1>
+            <p style={{ fontFamily: "var(--f-body)", fontSize: "0.82rem", color: "var(--text3)", marginTop: 2 }}>
+              {matiere.chapitres.length} chapitres disponibles
+            </p>
           </div>
         </div>
 
-        <div className="mt-6">
+        <div style={{ marginTop: 20 }}>
           <StatsMatiere matiereSlug={matiereSlug} chapitres={matiere.chapitres} />
         </div>
 
-        <p className="text-sm text-gray-600 font-medium mb-3 mt-2">Choisir un chapitre :</p>
+        <p style={{
+          fontFamily: "var(--f-body)",
+          fontSize: "0.82rem",
+          fontWeight: 600,
+          color: "var(--text2)",
+          marginBottom: 10,
+          marginTop: 8,
+        }}>
+          Choisir un chapitre :
+        </p>
 
         <ChapitresAvecProgression matiere={matiere} niveau={niveauSlug} />
       </main>

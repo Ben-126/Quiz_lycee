@@ -33,45 +33,71 @@ export default async function QuizPage({ params }: Props) {
   if (!chapitre) notFound();
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div style={{ background: "var(--bg)", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <Header />
-      <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-6">
-        {/* Fil d'ariane : Niveau → Matière → Chapitre → Quiz */}
-        <nav aria-label="Fil d'ariane" className="mb-5">
-          <ol className="flex flex-wrap items-center gap-x-1 gap-y-1 text-xs text-gray-400">
+      <main style={{ flex: 1, maxWidth: 720, margin: "0 auto", width: "100%", padding: "24px 24px 48px" }}>
+
+        {/* Fil d'ariane */}
+        <nav aria-label="Fil d'ariane" style={{ marginBottom: 20 }}>
+          <ol style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "2px 6px", listStyle: "none", padding: 0, margin: 0 }}>
             <li>
-              <Link href="/app" className="hover:text-indigo-600 transition-colors font-medium">
+              <Link href="/app" style={{ fontFamily: "var(--f-body)", fontWeight: 600, fontSize: "0.78rem", color: "var(--text3)", textDecoration: "none" }}>
                 {niveauInfo.emoji} {niveauInfo.label}
               </Link>
             </li>
-            <li aria-hidden="true" className="text-gray-300 select-none">›</li>
+            <li aria-hidden="true" style={{ color: "var(--text3)", fontSize: "0.78rem" }}>›</li>
             <li>
               <Link
                 href={`/${niveauSlug}/${matiereSlug}`}
-                className="hover:text-indigo-600 transition-colors font-medium flex items-center gap-1"
+                style={{ fontFamily: "var(--f-body)", fontWeight: 600, fontSize: "0.78rem", color: "var(--text3)", textDecoration: "none", display: "flex", alignItems: "center", gap: 3 }}
               >
                 <span>{matiere.emoji}</span>
                 <span>{matiere.nom}</span>
               </Link>
             </li>
-            <li aria-hidden="true" className="text-gray-300 select-none">›</li>
-            <li className="text-gray-600 font-medium truncate max-w-[180px]" title={chapitre.titre}>
+            <li aria-hidden="true" style={{ color: "var(--text3)", fontSize: "0.78rem" }}>›</li>
+            <li style={{ fontFamily: "var(--f-body)", fontWeight: 600, fontSize: "0.78rem", color: "var(--text3)", maxWidth: 180, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={chapitre.titre}>
               {chapitre.titre}
             </li>
-            <li aria-hidden="true" className="text-gray-300 select-none">›</li>
+            <li aria-hidden="true" style={{ color: "var(--text3)", fontSize: "0.78rem" }}>›</li>
             <li>
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700 font-semibold text-[10px] uppercase tracking-wide">
+              <span style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 4,
+                padding: "2px 8px",
+                borderRadius: "var(--r-pill)",
+                background: "rgba(77,94,232,0.12)",
+                color: "var(--indigo-l)",
+                fontFamily: "var(--f-head)",
+                fontWeight: 700,
+                fontSize: "0.65rem",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+              }}>
                 Quiz
               </span>
             </li>
           </ol>
-          {/* Compétences du chapitre */}
+
+          {/* Compétences évaluées */}
           {chapitre.competences.length > 0 && (
-            <div className="flex flex-wrap gap-1 mt-2" aria-label="Compétences évaluées">
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginTop: 8 }} aria-label="Compétences évaluées">
               {chapitre.competences.map((comp) => (
                 <span
                   key={comp.id}
-                  className="inline-block px-2 py-0.5 text-[10px] font-medium rounded-full bg-indigo-50 text-indigo-600 border border-indigo-100"
+                  style={{
+                    display: "inline-block",
+                    padding: "2px 8px",
+                    fontSize: "0.68rem",
+                    fontFamily: "var(--f-body)",
+                    fontWeight: 500,
+                    borderRadius: "var(--r-pill)",
+                    background: "rgba(77,94,232,0.1)",
+                    color: "var(--indigo-l)",
+                    border: "1px solid rgba(77,94,232,0.18)",
+                    lineHeight: 1.6,
+                  }}
                 >
                   {comp.titre}
                 </span>
@@ -80,7 +106,15 @@ export default async function QuizPage({ params }: Props) {
           )}
         </nav>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 sm:p-6" data-testid="quiz-container">
+        <div
+          data-testid="quiz-container"
+          style={{
+            background: "var(--card)",
+            borderRadius: "var(--r-lg)",
+            border: "1px solid var(--border)",
+            padding: "20px 24px",
+          }}
+        >
           <QuizRunner
             matiereSlug={matiereSlug}
             chapitreSlug={chapitreSlug}
@@ -91,7 +125,13 @@ export default async function QuizPage({ params }: Props) {
           />
         </div>
 
-        <p className="text-center text-xs text-gray-400 mt-4">
+        <p style={{
+          textAlign: "center",
+          fontFamily: "var(--f-body)",
+          fontSize: "0.75rem",
+          color: "var(--text3)",
+          marginTop: 16,
+        }}>
           Questions générées pour la classe de {niveauInfo.label}
         </p>
       </main>

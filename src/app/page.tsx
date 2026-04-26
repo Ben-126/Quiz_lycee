@@ -40,6 +40,96 @@ function Divider() {
   return <div style={{ height: 1, background: "var(--border)", margin: "0" }} />;
 }
 
+/* ── FAQ ─────────────────────────────────────────────────── */
+const FAQ_ITEMS = [
+  {
+    q: "C'est vraiment gratuit ?",
+    a: "Oui, complètement. Quiz illimités, toutes les matières, suivi de progression — sans carte bancaire. Un plan Premium arrivera plus tard, mais le cœur de Révioria restera toujours gratuit.",
+  },
+  {
+    q: "Ça suit vraiment le programme officiel ?",
+    a: "Les contenus sont basés sur les programmes publiés par l'Éducation nationale pour la Seconde, la Première et la Terminale. Les questions sont générées par IA à partir des compétences officielles de chaque chapitre.",
+  },
+  {
+    q: "J'ai besoin de créer un compte ?",
+    a: "Non. Tu peux réviser immédiatement sans inscription. Crée un compte si tu veux sauvegarder ta progression, accéder aux streaks ou jouer avec des amis.",
+  },
+  {
+    q: "Ça marche sur téléphone ?",
+    a: "Oui, le site est entièrement responsive. Révise depuis ton téléphone, ta tablette ou ton ordinateur.",
+  },
+  {
+    q: "Comment les questions sont générées ?",
+    a: "Chaque quiz est généré à la volée par une IA à partir des compétences précises de ton chapitre. Tu n'auras jamais deux fois exactement le même quiz — idéal pour vraiment mémoriser.",
+  },
+  {
+    q: "C'est quoi la révision espacée ?",
+    a: "C'est une technique prouvée scientifiquement : on te repose les chapitres au bon moment, juste avant que tu les oublies. La version avancée arrive avec le plan Premium.",
+  },
+];
+
+function SectionFAQ() {
+  return (
+    <section style={{ padding: "88px 24px" }}>
+      <div style={{ maxWidth: 720, margin: "0 auto" }}>
+        <div className="fade-up" style={{ textAlign: "center", marginBottom: 48 }}>
+          <SectionLabel color="var(--amber)">FAQ</SectionLabel>
+          <h2 style={{
+            fontFamily: "var(--f-head)",
+            fontWeight: 900,
+            fontSize: "clamp(1.8rem, 3.5vw, 2.6rem)",
+            letterSpacing: "-0.025em",
+            lineHeight: 1.15,
+            color: "var(--text)",
+            marginTop: 10,
+          }}>
+            Questions fréquentes
+          </h2>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          {FAQ_ITEMS.map((item, i) => (
+            <FAQItem key={i} question={item.q} answer={item.a} index={i} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FAQItem({ question, answer, index }: { question: string; answer: string; index: number }) {
+  return (
+    <div
+      className="fade-up"
+      style={{
+        background: "var(--card)",
+        border: "1px solid var(--border)",
+        borderRadius: "var(--r-lg)",
+        padding: "20px 24px",
+        transitionDelay: `${index * 0.05}s`,
+      }}
+    >
+      <h3 style={{
+        fontFamily: "var(--f-head)",
+        fontWeight: 800,
+        fontSize: "0.95rem",
+        color: "var(--text)",
+        marginBottom: 8,
+      }}>
+        {question}
+      </h3>
+      <p style={{
+        fontFamily: "var(--f-body)",
+        fontSize: "0.9rem",
+        color: "var(--text2)",
+        lineHeight: 1.65,
+        margin: 0,
+      }}>
+        {answer}
+      </p>
+    </div>
+  );
+}
+
 /* ── Section label ───────────────────────────────────────── */
 function SectionLabel({ children, color = "var(--indigo-l)" }: { children: string; color?: string }) {
   return (
@@ -602,6 +692,11 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      <Divider />
+
+      {/* ── FAQ ───────────────────────────────────────────── */}
+      <SectionFAQ />
 
       <Divider />
 

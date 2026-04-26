@@ -45,20 +45,34 @@ export default function StatsMatiere({ matiereSlug, chapitres }: StatsMatierePro
   if (!stats || stats.totalQuiz === 0) return null;
 
   return (
-    <div className="flex gap-3 p-3 bg-indigo-50 rounded-xl border border-indigo-100 mb-4">
-      <div className="flex-1 text-center">
-        <p className="text-lg font-bold text-indigo-700">{stats.totalQuiz}</p>
-        <p className="text-xs text-indigo-500">quiz complétés</p>
+    <div style={{
+      display: "flex",
+      gap: 0,
+      padding: "12px 16px",
+      background: "rgba(77,94,232,0.07)",
+      borderRadius: "var(--r-md)",
+      border: "1px solid rgba(77,94,232,0.15)",
+      marginBottom: 16,
+    }}>
+      <div style={{ flex: 1, textAlign: "center" }}>
+        <p style={{ fontFamily: "var(--f-head)", fontWeight: 900, fontSize: "1.1rem", color: "var(--indigo-l)" }}>
+          {stats.totalQuiz}
+        </p>
+        <p style={{ fontFamily: "var(--f-body)", fontSize: "0.72rem", color: "var(--text3)" }}>quiz complétés</p>
       </div>
-      <div className="w-px bg-indigo-200" />
-      <div className="flex-1 text-center">
-        <p className="text-lg font-bold text-indigo-700">{stats.scoreMoyen ?? "—"}%</p>
-        <p className="text-xs text-indigo-500">score moyen</p>
+      <div style={{ width: 1, background: "rgba(77,94,232,0.2)" }} />
+      <div style={{ flex: 1, textAlign: "center" }}>
+        <p style={{ fontFamily: "var(--f-head)", fontWeight: 900, fontSize: "1.1rem", color: "var(--indigo-l)" }}>
+          {stats.scoreMoyen ?? "—"}%
+        </p>
+        <p style={{ fontFamily: "var(--f-body)", fontSize: "0.72rem", color: "var(--text3)" }}>score moyen</p>
       </div>
-      <div className="w-px bg-indigo-200" />
-      <div className="flex-1 text-center">
-        <p className="text-lg font-bold text-indigo-700">{stats.chapitresMaitrises}/{chapitres.length}</p>
-        <p className="text-xs text-indigo-500">maîtrisés</p>
+      <div style={{ width: 1, background: "rgba(77,94,232,0.2)" }} />
+      <div style={{ flex: 1, textAlign: "center" }}>
+        <p style={{ fontFamily: "var(--f-head)", fontWeight: 900, fontSize: "1.1rem", color: "var(--indigo-l)" }}>
+          {stats.chapitresMaitrises}/{chapitres.length}
+        </p>
+        <p style={{ fontFamily: "var(--f-body)", fontSize: "0.72rem", color: "var(--text3)" }}>maîtrisés</p>
       </div>
     </div>
   );

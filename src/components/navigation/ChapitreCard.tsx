@@ -19,13 +19,41 @@ export default function ChapitreCard({ matiere, chapitre, niveau, progression }:
     <Link
       href={`/${niveau}/${matiere.slug}/${chapitre.slug}`}
       data-testid="chapitre-card"
-      className="group flex items-start gap-4 p-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-indigo-200 transition-all duration-200"
+      style={{
+        display: "flex",
+        alignItems: "flex-start",
+        gap: 14,
+        padding: "14px 16px",
+        background: "var(--card)",
+        borderRadius: "var(--r-lg)",
+        border: "1px solid var(--border)",
+        textDecoration: "none",
+        transition: "transform .2s, border-color .2s, box-shadow .2s",
+      }}
+      onMouseEnter={(e) => {
+        const el = e.currentTarget as HTMLAnchorElement;
+        el.style.transform = "translateY(-2px)";
+        el.style.borderColor = "rgba(77,94,232,0.28)";
+        el.style.boxShadow = "0 6px 20px rgba(0,0,0,0.25)";
+      }}
+      onMouseLeave={(e) => {
+        const el = e.currentTarget as HTMLAnchorElement;
+        el.style.transform = "translateY(0)";
+        el.style.borderColor = "var(--border)";
+        el.style.boxShadow = "none";
+      }}
     >
-      <div className={`${matiere.couleur} rounded-lg p-2 shrink-0 mt-0.5`}>
-        <span className="text-2xl" role="img" aria-label={matiere.nom}>{matiere.emoji}</span>
+      <div className={matiere.couleur} style={{ borderRadius: "var(--r-sm)", padding: "7px 9px", flexShrink: 0, marginTop: 1, opacity: 0.85 }}>
+        <span style={{ fontSize: "1.4rem" }} role="img" aria-label={matiere.nom}>{matiere.emoji}</span>
       </div>
-      <div className="flex-1 min-w-0">
-        <h3 className="font-semibold text-gray-800 group-hover:text-indigo-700 transition-colors text-sm leading-tight">
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <h3 style={{
+          fontFamily: "var(--f-head)",
+          fontWeight: 700,
+          fontSize: "0.9rem",
+          color: "var(--text)",
+          lineHeight: 1.3,
+        }}>
           {chapitre.titre}
         </h3>
         <IndicateurMaitrise
@@ -33,25 +61,46 @@ export default function ChapitreCard({ matiere, chapitre, niveau, progression }:
           nombreQuiz={progression?.nombreQuiz ?? 0}
         />
         {/* Tags des compétences */}
-        <div className="flex flex-wrap gap-1 mt-2" aria-label="Compétences du chapitre">
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginTop: 8 }} aria-label="Compétences du chapitre">
           {competencesVisibles.map((comp) => (
             <span
               key={comp.id}
-              className="inline-block px-2 py-0.5 text-[10px] font-medium rounded-full bg-indigo-50 text-indigo-600 border border-indigo-100 leading-tight"
+              style={{
+                display: "inline-block",
+                padding: "2px 8px",
+                fontSize: "0.68rem",
+                fontFamily: "var(--f-body)",
+                fontWeight: 500,
+                borderRadius: "var(--r-pill)",
+                background: "rgba(77,94,232,0.1)",
+                color: "var(--indigo-l)",
+                border: "1px solid rgba(77,94,232,0.18)",
+                lineHeight: 1.6,
+              }}
             >
               {comp.titre}
             </span>
           ))}
           {surplus > 0 && (
-            <span className="inline-block px-2 py-0.5 text-[10px] font-medium rounded-full bg-gray-100 text-gray-500 leading-tight">
+            <span style={{
+              display: "inline-block",
+              padding: "2px 8px",
+              fontSize: "0.68rem",
+              fontFamily: "var(--f-body)",
+              fontWeight: 500,
+              borderRadius: "var(--r-pill)",
+              background: "rgba(255,255,255,0.05)",
+              color: "var(--text3)",
+              lineHeight: 1.6,
+            }}>
               +{surplus}
             </span>
           )}
         </div>
       </div>
       <svg
-        className="text-gray-300 group-hover:text-indigo-400 transition-colors shrink-0 mt-1"
-        width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2"
+        style={{ color: "var(--text3)", flexShrink: 0, marginTop: 2, transition: "color .2s" }}
+        width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2"
       >
         <path d="M8 4l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
       </svg>

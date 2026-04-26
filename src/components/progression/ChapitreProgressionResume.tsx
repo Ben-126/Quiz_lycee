@@ -21,8 +21,22 @@ export default function ChapitreProgressionResume({ matiereSlug, chapitreSlug }:
   if (!perf) return null;
 
   return (
-    <div className="mb-5 p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
-      <p className="text-xs text-gray-500 font-medium mb-2">Ta progression sur ce chapitre</p>
+    <div style={{
+      marginBottom: 20,
+      padding: "14px 16px",
+      background: "var(--card)",
+      borderRadius: "var(--r-md)",
+      border: "1px solid var(--border)",
+    }}>
+      <p style={{
+        fontFamily: "var(--f-body)",
+        fontSize: "0.78rem",
+        fontWeight: 600,
+        color: "var(--text3)",
+        marginBottom: 8,
+      }}>
+        Ta progression sur ce chapitre
+      </p>
       <IndicateurMaitrise scoreMoyen={perf.scoreMoyen} nombreQuiz={perf.nombreQuiz} />
     </div>
   );

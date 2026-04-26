@@ -33,44 +33,65 @@ export default async function ChapitreDetailPage({ params }: Props) {
   if (!chapitre) notFound();
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div style={{ background: "var(--bg)", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <Header />
-      <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-6">
+      <main style={{ flex: 1, maxWidth: 720, margin: "0 auto", width: "100%", padding: "24px 24px 48px" }}>
 
         {/* Fil d'ariane */}
-        <nav aria-label="Fil d'ariane" className="mb-5">
-          <ol className="flex flex-wrap items-center gap-x-1 gap-y-1 text-xs text-gray-400">
+        <nav aria-label="Fil d'ariane" style={{ marginBottom: 20 }}>
+          <ol style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "2px 6px", listStyle: "none", padding: 0, margin: 0 }}>
             <li>
-              <Link href="/app" className="hover:text-indigo-600 transition-colors font-medium">
+              <Link href="/app" style={{ fontFamily: "var(--f-body)", fontWeight: 600, fontSize: "0.78rem", color: "var(--text3)", textDecoration: "none" }}
+                onMouseEnter={undefined} onMouseLeave={undefined}
+              >
                 {niveauInfo.emoji} {niveauInfo.label}
               </Link>
             </li>
-            <li aria-hidden="true" className="text-gray-300 select-none">›</li>
+            <li aria-hidden="true" style={{ color: "var(--text3)", fontSize: "0.78rem" }}>›</li>
             <li>
               <Link
                 href={`/${niveauSlug}/${matiereSlug}`}
-                className="hover:text-indigo-600 transition-colors font-medium flex items-center gap-1"
+                style={{ fontFamily: "var(--f-body)", fontWeight: 600, fontSize: "0.78rem", color: "var(--text3)", textDecoration: "none", display: "flex", alignItems: "center", gap: 3 }}
               >
                 <span>{matiere.emoji}</span>
                 <span>{matiere.nom}</span>
               </Link>
             </li>
-            <li aria-hidden="true" className="text-gray-300 select-none">›</li>
-            <li className="text-gray-700 font-semibold truncate max-w-[200px]" title={chapitre.titre}>
+            <li aria-hidden="true" style={{ color: "var(--text3)", fontSize: "0.78rem" }}>›</li>
+            <li style={{ fontFamily: "var(--f-body)", fontWeight: 600, fontSize: "0.78rem", color: "var(--text2)", maxWidth: 200, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}
+              title={chapitre.titre}>
               {chapitre.titre}
             </li>
           </ol>
         </nav>
 
         {/* En-tête du chapitre */}
-        <div className="flex items-center gap-3 mb-6">
-          <div className={`${matiere.couleur} rounded-xl p-3 shrink-0`}>
-            <span className="text-3xl" role="img" aria-label={matiere.nom}>{matiere.emoji}</span>
+        <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 24 }}>
+          <div className={matiere.couleur} style={{ borderRadius: "var(--r-md)", padding: "10px 12px", flexShrink: 0, opacity: 0.9 }}>
+            <span style={{ fontSize: "1.8rem" }} role="img" aria-label={matiere.nom}>{matiere.emoji}</span>
           </div>
           <div>
-            <p className="text-xs text-gray-400 font-medium uppercase tracking-wide">{matiere.nom}</p>
-            <h1 className="text-xl font-bold text-gray-800 leading-tight">{chapitre.titre}</h1>
-            <p className="text-sm text-gray-500 mt-0.5">
+            <p style={{
+              fontFamily: "var(--f-head)",
+              fontWeight: 700,
+              fontSize: "0.72rem",
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              color: "var(--text3)",
+              marginBottom: 2,
+            }}>
+              {matiere.nom}
+            </p>
+            <h1 style={{
+              fontFamily: "var(--f-head)",
+              fontWeight: 900,
+              fontSize: "1.2rem",
+              color: "var(--text)",
+              lineHeight: 1.25,
+            }}>
+              {chapitre.titre}
+            </h1>
+            <p style={{ fontFamily: "var(--f-body)", fontSize: "0.8rem", color: "var(--text3)", marginTop: 2 }}>
               {chapitre.competences.length} compétence{chapitre.competences.length > 1 ? "s" : ""} au programme
             </p>
           </div>
@@ -80,27 +101,65 @@ export default async function ChapitreDetailPage({ params }: Props) {
         <ChapitreProgressionResume matiereSlug={matiereSlug} chapitreSlug={chapitreSlug} />
 
         {/* Compétences au programme */}
-        <section className="mb-6" aria-labelledby="titre-competences">
+        <section style={{ marginBottom: 24 }} aria-labelledby="titre-competences">
           <h2
             id="titre-competences"
-            className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2"
+            style={{
+              fontFamily: "var(--f-head)",
+              fontWeight: 800,
+              fontSize: "0.82rem",
+              color: "var(--text2)",
+              marginBottom: 10,
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
+            }}
           >
-            <span className="text-indigo-500" aria-hidden="true">📋</span>
+            <span style={{ color: "var(--indigo-l)" }} aria-hidden="true">📋</span>
             Compétences au programme
           </h2>
-          <ul className="space-y-2">
+          <ul style={{ display: "flex", flexDirection: "column", gap: 8, padding: 0, margin: 0, listStyle: "none" }}>
             {chapitre.competences.map((comp, i) => (
               <li
                 key={comp.id}
-                className="flex items-start gap-3 p-3 bg-indigo-50 rounded-xl border border-indigo-100"
+                style={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: 12,
+                  padding: "10px 14px",
+                  background: "rgba(77,94,232,0.07)",
+                  borderRadius: "var(--r-md)",
+                  border: "1px solid rgba(77,94,232,0.15)",
+                }}
               >
                 <span
                   aria-hidden="true"
-                  className="flex-shrink-0 w-6 h-6 bg-indigo-200 text-indigo-700 rounded-full flex items-center justify-center text-xs font-bold"
+                  style={{
+                    flexShrink: 0,
+                    width: 22,
+                    height: 22,
+                    background: "rgba(77,94,232,0.18)",
+                    color: "var(--indigo-l)",
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "0.72rem",
+                    fontWeight: 800,
+                    fontFamily: "var(--f-head)",
+                  }}
                 >
                   {i + 1}
                 </span>
-                <span className="text-sm text-indigo-800 font-medium leading-snug">{comp.titre}</span>
+                <span style={{
+                  fontFamily: "var(--f-body)",
+                  fontSize: "0.88rem",
+                  color: "var(--text)",
+                  fontWeight: 500,
+                  lineHeight: 1.45,
+                }}>
+                  {comp.titre}
+                </span>
               </li>
             ))}
           </ul>
@@ -110,12 +169,40 @@ export default async function ChapitreDetailPage({ params }: Props) {
         <Link
           href={`/${niveauSlug}/${matiereSlug}/${chapitreSlug}/quiz`}
           data-testid="btn-demarrer-quiz"
-          className="block w-full py-4 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white rounded-2xl font-bold text-center text-base transition-colors shadow-sm hover:shadow-md"
+          style={{
+            display: "block",
+            width: "100%",
+            padding: "14px",
+            background: "linear-gradient(135deg, #EF6E5A 0%, #E85840 100%)",
+            color: "#fff",
+            borderRadius: "var(--r-pill)",
+            fontFamily: "var(--f-head)",
+            fontWeight: 800,
+            fontSize: "1rem",
+            textAlign: "center",
+            textDecoration: "none",
+            boxShadow: "0 4px 20px rgba(239,110,90,0.32)",
+            transition: "transform .15s, box-shadow .15s",
+          }}
+          onMouseEnter={(e) => {
+            (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-2px)";
+            (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 6px 24px rgba(239,110,90,0.44)";
+          }}
+          onMouseLeave={(e) => {
+            (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(0)";
+            (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 4px 20px rgba(239,110,90,0.32)";
+          }}
         >
           🚀 Démarrer le quiz
         </Link>
 
-        <p className="text-center text-xs text-gray-400 mt-3">
+        <p style={{
+          textAlign: "center",
+          fontFamily: "var(--f-body)",
+          fontSize: "0.75rem",
+          color: "var(--text3)",
+          marginTop: 12,
+        }}>
           Questions générées par IA · classe de {niveauInfo.label}
         </p>
       </main>
