@@ -223,6 +223,16 @@ function PricingItem({ included, children }: { included: boolean; children: stri
   );
 }
 
+const FAQ_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: FAQ_ITEMS.map((item) => ({
+    "@type": "Question",
+    name: item.q,
+    acceptedAnswer: { "@type": "Answer", text: item.a },
+  })),
+};
+
 /* ════════════════════════════════════════════════════════════
    LANDING PAGE
 ═══════════════════════════════════════════════════════════════ */
@@ -231,6 +241,10 @@ export default function LandingPage() {
 
   return (
     <div className="landing-grain" style={{ background: "var(--bg)", color: "var(--text)", minHeight: "100vh", position: "relative" }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_SCHEMA) }}
+      />
 
       {/* ── NAV PILL FLOTTANTE ─────────────────────────────── */}
       <nav style={{

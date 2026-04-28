@@ -34,6 +34,8 @@ export async function generateStaticParams() {
   );
 }
 
+const BASE_URL = "https://quiz-2nd-q5pu.vercel.app";
+
 export default async function ChapitreDetailPage({ params }: Props) {
   const { niveau: niveauSlug, matiere: matiereSlug, chapitre: chapitreSlug } = await params;
 
@@ -46,8 +48,25 @@ export default async function ChapitreDetailPage({ params }: Props) {
   const chapitre = matiere.chapitres.find((c) => c.slug === chapitreSlug);
   if (!chapitre) notFound();
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Quiz",
+    name: `Quiz ${chapitre.titre} — ${matiere.nom} ${niveauInfo.label}`,
+    description: `Quiz IA sur "${chapitre.titre}" en ${matiere.nom}, classe de ${niveauInfo.label}. ${chapitre.competences.length} compétences au programme.`,
+    url: `${BASE_URL}/${niveauSlug}/${matiereSlug}/${chapitreSlug}`,
+    educationalLevel: niveauInfo.label,
+    about: { "@type": "Thing", name: chapitre.titre },
+    provider: { "@type": "Organization", name: "Révioria", url: BASE_URL },
+    isAccessibleForFree: true,
+    inLanguage: "fr-FR",
+  };
+
   return (
     <div style={{ background: "var(--bg)", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Header />
       <main style={{ flex: 1, maxWidth: 720, margin: "0 auto", width: "100%", padding: "24px 24px 48px" }}>
 

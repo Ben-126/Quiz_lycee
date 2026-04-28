@@ -5,6 +5,24 @@ import BandeauCookies from "@/components/legal/BandeauCookies";
 
 const BASE_URL = "https://quiz-2nd-q5pu.vercel.app";
 
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Révioria",
+  url: BASE_URL,
+  description: "Quiz IA gratuits pour réviser le lycée : Seconde, Première, Terminale.",
+  inLanguage: "fr-FR",
+  publisher: {
+    "@type": "Organization",
+    name: "Révioria",
+    url: BASE_URL,
+    logo: {
+      "@type": "ImageObject",
+      url: `${BASE_URL}/logo-revioria.png`,
+    },
+  },
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
@@ -71,6 +89,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="fr">
       <body className="min-h-screen flex flex-col">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        />
         <ServiceWorkerRegistrar />
         {children}
         <BandeauCookies />
