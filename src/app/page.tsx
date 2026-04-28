@@ -257,8 +257,8 @@ export default function LandingPage() {
           <span style={{ fontFamily: "var(--f-head)", fontWeight: 900, fontSize: "1rem", color: "var(--text)" }}>Révioria</span>
         </div>
 
-        {/* Liens nav */}
-        <div style={{ display: "flex", gap: 4 }}>
+        {/* Liens nav — masqués sur mobile */}
+        <div className="hidden sm:flex" style={{ gap: 4 }}>
           {[
             { label: "Fonctionnalités", href: "#features" },
             { label: "Matières", href: "#matieres" },
