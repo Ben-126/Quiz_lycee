@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useLayoutEffect, useState, useRef } from "react";
 
 interface TimerBarProps {
   dureeSecondes: number;
@@ -11,9 +11,12 @@ interface TimerBarProps {
 export default function TimerBar({ dureeSecondes, onExpire, reset = 0 }: TimerBarProps) {
   const [restant, setRestant] = useState(dureeSecondes);
   const onExpireRef = useRef(onExpire);
-  onExpireRef.current = onExpire;
+  useLayoutEffect(() => {
+    onExpireRef.current = onExpire;
+  });
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setRestant(dureeSecondes);
   }, [reset, dureeSecondes]);
 

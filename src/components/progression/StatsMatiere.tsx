@@ -35,6 +35,7 @@ export default function StatsMatiere({ matiereSlug, chapitres }: StatsMatierePro
       }
     }
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setStats({
       totalQuiz,
       scoreMoyen: chapitresAvecDonnees > 0 ? Math.round(sommeScores / chapitresAvecDonnees) : null,

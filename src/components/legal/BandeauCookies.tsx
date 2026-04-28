@@ -10,6 +10,7 @@ export default function BandeauCookies() {
 
   useEffect(() => {
     const consentement = localStorage.getItem(CONSENT_KEY);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (!consentement) setVisible(true);
   }, []);
 

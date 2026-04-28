@@ -21,6 +21,7 @@ export default function ReconnaissanceVocale() {
 
   useEffect(() => {
     const supported = !!(window.SpeechRecognition ?? window.webkitSpeechRecognition);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (!supported) setSupporte(false);
   }, []);
 

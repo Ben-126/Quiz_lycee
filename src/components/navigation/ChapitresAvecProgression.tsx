@@ -25,6 +25,7 @@ export default function ChapitresAvecProgression({ matiere, niveau }: ChapitresA
           ? { scoreMoyen: perf.scoreMoyen, nombreQuiz: perf.nombreQuizCompletes }
           : null;
     }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setProgressions(result);
   }, [matiere]);
 

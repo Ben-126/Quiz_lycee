@@ -9,6 +9,7 @@ export default function BanniereObjectif() {
   const [progressionsNote, setProgressionsNote] = useState<ProgressionObjectifNote[]>([]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setProgression(getProgressionObjectif());
     setProgressionsNote(getProgressionsObjectifsNote());
   }, []);

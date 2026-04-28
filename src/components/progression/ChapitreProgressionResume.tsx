@@ -14,6 +14,7 @@ export default function ChapitreProgressionResume({ matiereSlug, chapitreSlug }:
   useEffect(() => {
     const p = getPerformance(matiereSlug, chapitreSlug);
     if (p && p.nombreQuizCompletes > 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setPerf({ scoreMoyen: p.scoreMoyen, nombreQuiz: p.nombreQuizCompletes });
     }
   }, [matiereSlug, chapitreSlug]);

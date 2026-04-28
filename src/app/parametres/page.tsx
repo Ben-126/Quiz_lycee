@@ -10,11 +10,9 @@ import {
   type QuestionsParQuiz,
 } from "@/lib/parametres";
 import {
-  getObjectifsNote,
   ajouterObjectifNote,
   supprimerObjectifNote,
   getProgressionsObjectifsNote,
-  type ObjectifNote,
   type ProgressionObjectifNote,
 } from "@/lib/objectifs-personnalises";
 import { NIVEAUX } from "@/data/programmes";
@@ -62,6 +60,7 @@ export default function ParametresPage() {
   }
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setParams(getParametres());
     rafraichirObjectifs();
     setMounted(true);

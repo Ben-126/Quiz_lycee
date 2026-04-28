@@ -57,13 +57,6 @@ function construireReponse(messages: Message[], ctx: CoachContextLocal): string 
   const dernierMessage = messages[messages.length - 1]?.content ?? "";
   const intention = detecterIntention(dernierMessage);
 
-  const niveauLabel =
-    ctx.niveauLycee === "premiere"
-      ? "Première"
-      : ctx.niveauLycee === "terminale"
-      ? "Terminale"
-      : "Seconde";
-
   const contexteDisponible =
     ctx.explication || ctx.etapes?.length || ctx.erreursFrequentes?.length;
 

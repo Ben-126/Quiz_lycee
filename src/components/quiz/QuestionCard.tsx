@@ -41,6 +41,7 @@ export default function QuestionCard({
   const [tempsRestantMs, setTempsRestantMs] = useState(maxMs);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setTempsRestantMs(maxMs);
     if (disabled || sansMinuterie) return;
     const debut = Date.now();

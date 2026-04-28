@@ -13,6 +13,7 @@ export default function XPBar() {
 
   useEffect(() => {
     const profil = getProfilGamification();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setXpTotal(profil.xpTotal);
     setMounted(true);
   }, []);

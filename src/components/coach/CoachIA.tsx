@@ -187,7 +187,7 @@ export default function CoachIA({
                         className="text-xs underline"
                         style={{ color: "var(--indigo-l)" }}
                       >
-                        Voir l'explication
+                        Voir l&apos;explication
                       </button>
                     )}
                     {etapes && etapes.length > 0 && (

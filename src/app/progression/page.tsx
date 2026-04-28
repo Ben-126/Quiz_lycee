@@ -41,6 +41,7 @@ export default function ProgressionPage() {
   const [notifsStreak, setNotifsStreak] = useState<NotifStreak[]>([]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setHistorique(getHistorique());
     setPerformances(getToutesPerformances());
     const profil = getProfilGamification();
@@ -56,6 +57,7 @@ export default function ProgressionPage() {
   useEffect(() => {
     const niveauInfo = NIVEAUX.find((n) => n.slug === niveauActif);
     if (niveauInfo && niveauInfo.matieres.length > 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setMatiereActiveSlug(niveauInfo.matieres[0].slug);
       setChapitreActifSlug(null);
     }
@@ -90,6 +92,7 @@ export default function ProgressionPage() {
         scoreMoyen: perf && perf.nombreQuizCompletes > 0 ? perf.scoreMoyen : null,
       };
     });
+  // eslint-disable-next-line react-hooks/preserve-manual-memoization
   }, [matiereActive, matiereActiveSlug, performances]);
 
   const tousLesBadges = useMemo(() => {

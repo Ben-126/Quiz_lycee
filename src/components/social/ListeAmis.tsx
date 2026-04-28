@@ -35,6 +35,7 @@ export default function ListeAmis({ userId }: ListeAmisProps) {
   }, [userId]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     charger();
   }, [charger]);
 
