@@ -91,7 +91,7 @@ export default function Header() {
             justifyContent: "center",
             overflow: "hidden",
           }}>
-            <Image src="/Révioria_logo_seul.png" alt="Révioria" width={26} height={26} style={{ objectFit: "contain" }} />
+            <Image src="/logo-seul.png" alt="Révioria" width={26} height={26} style={{ objectFit: "contain" }} />
           </div>
           <span style={{ fontFamily: "var(--f-head)", fontWeight: 900, fontSize: "1rem", color: "var(--text)" }}>
             Révioria
