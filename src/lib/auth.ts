@@ -98,11 +98,14 @@ export async function connexionGoogle(): Promise<ResultatAuth> {
 }
 
 export async function supprimerCompte(): Promise<ResultatAuth> {
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return { erreur: "Non connecté." };
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) return { erreur: "Non connecté." };
 
-  // Supprimer le profil (cascade supprime tout le reste via FK)
-  const { error } = await supabase.from("profiles").delete().eq("id", user.id);
+  // Appelle l'Edge Function qui supprime profil + compte auth.users côté serveur
+  const { error } = await supabase.functions.invoke("delete-account", {
+    headers: { Authorization: `Bearer ${session.access_token}` },
+  });
+
   if (error) return { erreur: error.message };
 
   // RGPD : vider TOUTES les données locales de l'appareil
