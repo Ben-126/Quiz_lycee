@@ -55,6 +55,7 @@ export default function Header() {
   };
 
   return (
+    <>
     <header style={{
       position: "sticky",
       top: 0,
@@ -236,12 +237,14 @@ export default function Header() {
         </div>
       </div>
 
+    </header>
+
       {showAuth && (
         <AuthModal
           onFermer={() => setShowAuth(false)}
           onConnecte={() => setShowAuth(false)}
         />
       )}
-    </header>
+    </>
   );
 }
