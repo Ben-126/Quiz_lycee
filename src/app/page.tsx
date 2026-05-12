@@ -337,15 +337,13 @@ export default function LandingPage() {
         overflow: "hidden",
         padding: "160px 24px 100px",
         textAlign: "center",
-        maxWidth: 900,
-        margin: "0 auto",
       }}>
         {/* Glows atmosphériques */}
         <div style={{ position: "absolute", top: 60, left: "50%", transform: "translateX(-50%)", width: 560, height: 400, background: "var(--glow-i)", filter: "blur(90px)", borderRadius: "50%", pointerEvents: "none", zIndex: 0 }} />
         <div style={{ position: "absolute", bottom: 40, right: "5%", width: 380, height: 380, background: "var(--glow-c)", filter: "blur(90px)", borderRadius: "50%", pointerEvents: "none", zIndex: 0 }} />
         <div style={{ position: "absolute", top: 80, left: "5%", width: 260, height: 260, background: "var(--glow-a)", filter: "blur(90px)", borderRadius: "50%", pointerEvents: "none", zIndex: 0 }} />
 
-        <div style={{ position: "relative", zIndex: 1 }}>
+        <div style={{ position: "relative", zIndex: 1, maxWidth: 900, margin: "0 auto" }}>
           {/* Badge hero */}
           <div className="fade-up" style={{ marginBottom: 24, display: "inline-block" }}>
             <span style={{
