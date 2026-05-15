@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { inscrire, connecter, connexionGoogle } from "@/lib/auth";
 
 interface AuthModalProps {
@@ -11,6 +12,7 @@ interface AuthModalProps {
 type Onglet = "connexion" | "inscription";
 
 export default function AuthModal({ onFermer, onConnecte }: AuthModalProps) {
+  const router = useRouter();
   const [onglet, setOnglet] = useState<Onglet>("connexion");
   const [email, setEmail] = useState("");
   const [motDePasse, setMotDePasse] = useState("");
@@ -44,6 +46,7 @@ export default function AuthModal({ onFermer, onConnecte }: AuthModalProps) {
       } else {
         onConnecte();
         onFermer();
+        router.push("/app");
       }
     } else {
       if (pseudo.trim().length < 3) {
@@ -68,6 +71,7 @@ export default function AuthModal({ onFermer, onConnecte }: AuthModalProps) {
       } else {
         onConnecte();
         onFermer();
+        router.push("/app");
       }
     }
 
