@@ -87,6 +87,14 @@ export default function QuizRunner({ matiereSlug, chapitreSlug, titreChapitre, n
   const [tempsControle, setTempsControle] = useState(0);
   const [resultatGamification, setResultatGamification] = useState<ResultatGamification | null>(null);
   const debutQuestionRef = useRef<number>(0);
+  const [transitioning, setTransitioning] = useState(false);
+  const transitionTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (transitionTimer.current) clearTimeout(transitionTimer.current);
+    };
+  }, []);
 
   // Countdown timer for contrôle mode
   useEffect(() => {
@@ -203,6 +211,14 @@ export default function QuizRunner({ matiereSlug, chapitreSlug, titreChapitre, n
     handleTerminer([...reponses, ...remaining]);
   }, [modeQuiz, tempsControle, etat, reponses, questions, handleTerminer]);
 
+  const avancerQuestion = useCallback((callback: () => void) => {
+    setTransitioning(true);
+    transitionTimer.current = setTimeout(() => {
+      callback();
+      setTransitioning(false);
+    }, 180);
+  }, []);
+
   const handleSelectMode = (mode: ModeQuiz) => {
     setModeQuiz(mode);
     setModeRevision({ actif: false, questionsRatees: [] });
@@ -256,9 +272,11 @@ export default function QuizRunner({ matiereSlug, chapitreSlug, titreChapitre, n
       if (questionIndex + 1 >= questions.length) {
         handleTerminer(newReponses);
       } else {
-        setQuestionIndex((i) => i + 1);
-        debutQuestionRef.current = Date.now();
-        setEtat("question");
+        avancerQuestion(() => {
+          setQuestionIndex((i) => i + 1);
+          debutQuestionRef.current = Date.now();
+          setEtat("question");
+        });
       }
       return;
     }
@@ -325,10 +343,12 @@ export default function QuizRunner({ matiereSlug, chapitreSlug, titreChapitre, n
     if (questionIndex + 1 >= questions.length) {
       handleTerminer(reponses);
     } else {
-      setQuestionIndex((i) => i + 1);
-      setDerniereReponse(null);
-      debutQuestionRef.current = Date.now();
-      setEtat("question");
+      avancerQuestion(() => {
+        setQuestionIndex((i) => i + 1);
+        setDerniereReponse(null);
+        debutQuestionRef.current = Date.now();
+        setEtat("question");
+      });
     }
   };
 
@@ -492,17 +512,19 @@ export default function QuizRunner({ matiereSlug, chapitreSlug, titreChapitre, n
       )}
 
       {etat === "question" && (
-        <QuestionCard
-          question={questionCourante}
-          index={questionIndex}
-          total={questions.length}
-          onAnswer={handleReponse}
-          onTimeUp={modeQuiz === "controle" ? undefined : handleTimeUp}
-          disabled={false}
-          showMathKeyboard={showMathKeyboard}
-          competenceLabel={competences.length > 0 ? competences[questionIndex % competences.length]?.titre : undefined}
-          sansMinuterie={modeQuiz === "controle"}
-        />
+        <div key={questionIndex} className={transitioning ? "question-slide-out" : "question-slide-in"}>
+          <QuestionCard
+            question={questionCourante}
+            index={questionIndex}
+            total={questions.length}
+            onAnswer={handleReponse}
+            onTimeUp={modeQuiz === "controle" ? undefined : handleTimeUp}
+            disabled={false}
+            showMathKeyboard={showMathKeyboard}
+            competenceLabel={competences.length > 0 ? competences[questionIndex % competences.length]?.titre : undefined}
+            sansMinuterie={modeQuiz === "controle"}
+          />
+        </div>
       )}
 
       {etat === "correction" && derniereReponse && (
