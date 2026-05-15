@@ -49,16 +49,10 @@
 
 /* ── Base ────────────────────────────────────────────────── */
 body {
-  color: var(--foreground);
+  background: var(--bg);
+  color: var(--text);
   font-family: var(--f-body), Arial, sans-serif;
   min-height: 100vh;
-}
-
-/* Pages app (fond clair) */
-body.app-theme {
-  background: linear-gradient(-45deg, #eef2ff, #fdf4ff, #fff7ed, #ecfdf5);
-  background-size: 400% 400%;
-  animation: gradientShift 20s ease infinite;
 }
 
 /* ── Grain de fond (landing) ─────────────────────────────── */
@@ -73,12 +67,6 @@ body.app-theme {
 }
 
 /* ── Animations ──────────────────────────────────────────── */
-@keyframes gradientShift {
-  0%   { background-position: 0% 50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
 @keyframes bounceIn {
   0%   { opacity: 0; transform: translateX(-50%) translateY(-10px); }
   60%  { opacity: 1; transform: translateX(-50%) translateY(4px); }
@@ -104,20 +92,28 @@ body.app-theme {
   transform: translateY(0);
 }
 
-/* ── Formulaires (app pages) ─────────────────────────────── */
+/* ── Formulaires ─────────────────────────────────────────── */
 input, textarea, select {
-  color: #111827;
+  color: var(--text);
+  background: var(--bg3);
+  border-color: var(--border2);
 }
 input::placeholder, textarea::placeholder {
-  color: #9ca3af;
+  color: var(--text3);
 }
 
+/* ── Transitions questions quiz ──────────────────────────── */
+@keyframes slideOut {
+  to { opacity: 0; transform: translateX(-16px); }
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.question-slide-out { animation: slideOut 0.18s ease forwards; }
+.question-slide-in  { animation: slideIn  0.18s ease forwards; }
+
 @media (prefers-reduced-motion: reduce) {
-  body.app-theme {
-    animation: none;
-    background: #eef2ff;
-  }
-  .fade-up {
-    transition: none;
-  }
+  .fade-up { transition: none; }
+  .question-slide-out, .question-slide-in { animation: none; }
 }

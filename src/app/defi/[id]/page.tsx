@@ -40,10 +40,10 @@ export default function PageDefi() {
 
   if (chargement) {
     return (
-      <div className="flex flex-col min-h-screen">
+      <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh", background: "var(--bg)" }}>
         <Header />
-        <div className="flex-1 flex items-center justify-center">
-          <div className="w-10 h-10 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin" />
+        <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ width: 40, height: 40, border: "4px solid rgba(77,94,232,0.3)", borderTopColor: "var(--indigo)", borderRadius: "50%" }} className="animate-spin" />
         </div>
       </div>
     );
@@ -51,12 +51,12 @@ export default function PageDefi() {
 
   if (erreur || !defi) {
     return (
-      <div className="flex flex-col min-h-screen">
+      <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh", background: "var(--bg)" }}>
         <Header />
-        <main className="flex-1 flex flex-col items-center justify-center gap-4">
-          <p className="text-4xl">😕</p>
-          <p className="text-gray-700 font-medium">{erreur ?? "Défi introuvable"}</p>
-          <button onClick={() => router.push("/")} className="text-indigo-600 hover:underline text-sm">
+        <main style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 16 }}>
+          <p style={{ fontSize: 40 }}>😕</p>
+          <p style={{ color: "var(--text2)", fontWeight: 500 }}>{erreur ?? "Défi introuvable"}</p>
+          <button onClick={() => router.push("/")} style={{ color: "var(--indigo-l)", fontSize: 14, background: "none", border: "none", cursor: "pointer" }}>
             Retour à l&apos;accueil
           </button>
         </main>
@@ -66,11 +66,11 @@ export default function PageDefi() {
 
   if (!user) {
     return (
-      <div className="flex flex-col min-h-screen">
+      <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh", background: "var(--bg)" }}>
         <Header />
-        <main className="flex-1 flex flex-col items-center justify-center gap-4 px-4">
-          <p className="text-4xl">🔒</p>
-          <p className="text-gray-700 font-medium text-center">
+        <main style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 16, padding: "0 16px" }}>
+          <p style={{ fontSize: 40 }}>🔒</p>
+          <p style={{ color: "var(--text2)", fontWeight: 500, textAlign: "center" }}>
             Connecte-toi pour relever ce défi !
           </p>
           <CarteDefi defi={defi} resultats={resultats} userId="" />
@@ -83,26 +83,26 @@ export default function PageDefi() {
   const expire = new Date(defi.expires_at) < new Date();
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh", background: "var(--bg)" }}>
       <Header />
-      <main className="flex-1 max-w-xl mx-auto w-full px-4 py-6 space-y-6">
-        <h1 className="text-xl font-bold text-gray-800">Défi reçu</h1>
+      <main style={{ flex: 1, maxWidth: 560, margin: "0 auto", width: "100%", padding: "24px 16px", display: "flex", flexDirection: "column", gap: 24 }}>
+        <h1 style={{ fontSize: 20, fontWeight: 700, color: "var(--text)" }}>Défi reçu</h1>
         <CarteDefi defi={defi} resultats={resultats} userId={user.id} />
 
         {!dejaFait && !expire && (
           <button
             onClick={() => router.push(`/${defi.niveau_scolaire}/${defi.matiere_slug}/${defi.chapitre_slug}/quiz?defi=${defi.id}&timer=${defi.time_limit_sec}`)}
-            className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition-colors"
+            style={{ width: "100%", padding: "14px", background: "var(--indigo)", color: "#fff", fontWeight: 600, borderRadius: 14, border: "none", cursor: "pointer", fontSize: 16 }}
           >
             ⚡ Commencer le défi
           </button>
         )}
 
         {dejaFait && (
-          <p className="text-center text-green-600 font-semibold">Tu as déjà relevé ce défi !</p>
+          <p style={{ textAlign: "center", color: "var(--teal)", fontWeight: 600 }}>Tu as déjà relevé ce défi !</p>
         )}
         {expire && (
-          <p className="text-center text-gray-400">Ce défi est expiré.</p>
+          <p style={{ textAlign: "center", color: "var(--text3)" }}>Ce défi est expiré.</p>
         )}
       </main>
     </div>

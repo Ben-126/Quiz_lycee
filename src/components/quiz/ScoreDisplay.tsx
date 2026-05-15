@@ -1,7 +1,25 @@
 "use client";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { Competence, Question, ReponseUtilisateur, ResultatGamification } from "@/types";
 import XPToast from "@/components/gamification/XPToast";
+
+function useAnimatedCounter(target: number, duration = 1200): number {
+  const [value, setValue] = useState(0);
+  useEffect(() => {
+    const start = Date.now();
+    let raf: number;
+    const tick = () => {
+      const progress = Math.min((Date.now() - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setValue(Math.round(target * eased));
+      if (progress < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [target, duration]);
+  return value;
+}
 
 interface ScoreDisplayProps {
   score: number;
@@ -49,10 +67,27 @@ export default function ScoreDisplay({
   resultatGamification = null,
 }: ScoreDisplayProps) {
   const pourcentage = Math.round((score / maxScore) * 100);
+  const animatedPourcentage = useAnimatedCounter(pourcentage);
   const nbCorrectes = reponses.filter((r) => r.correcte).length;
-  const notesur20 = questions.length > 0
+  const notesur20Raw = questions.length > 0
     ? Math.round((nbCorrectes / questions.length) * 200) / 10
     : Math.round(pourcentage * 20 / 100 * 10) / 10;
+  const animatedNote = useAnimatedCounter(Math.round(notesur20Raw * 10)) / 10;
+
+  useEffect(() => {
+    if (pourcentage >= 60) {
+      import("canvas-confetti").then(({ default: confetti }) => {
+        confetti({
+          particleCount: pourcentage >= 80 ? 150 : 80,
+          spread: 70,
+          origin: { y: 0.55 },
+          colors: ["#4D5EE8", "#EF6E5A", "#F5C840", "#3DD6BF"],
+        });
+      });
+    }
+  }, [pourcentage]);
+
+  const notesur20 = notesur20Raw;
 
   const getMessage = () => {
     if (modeControle) {
@@ -101,7 +136,7 @@ export default function ScoreDisplay({
         <div>
           <div className="flex items-baseline justify-center gap-1">
             <span className="text-6xl font-bold" style={{ color: couleurNote }} data-testid="note-controle">
-              {notesur20 % 1 === 0 ? notesur20.toFixed(0) : notesur20.toFixed(1)}
+              {animatedNote % 1 === 0 ? animatedNote.toFixed(0) : animatedNote.toFixed(1)}
             </span>
             <span className="text-3xl" style={{ color: "var(--text3)" }}>/20</span>
           </div>
@@ -112,7 +147,7 @@ export default function ScoreDisplay({
       ) : (
         <div>
           <p className="text-5xl font-bold" style={{ color: "var(--text)" }} data-testid="score-valeur">
-            {pourcentage}<span className="text-3xl" style={{ color: "var(--text3)" }}>%</span>
+            {animatedPourcentage}<span className="text-3xl" style={{ color: "var(--text3)" }}>%</span>
           </p>
           <p style={{ fontSize: 14, color: "var(--text3)", marginTop: 4 }} data-testid="score-points">{score} pts sur {maxScore}</p>
         </div>
