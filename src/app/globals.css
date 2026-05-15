@@ -48,6 +48,10 @@
 }
 
 /* ── Base ────────────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background: var(--bg);
   color: var(--text);
@@ -102,6 +106,31 @@ input::placeholder, textarea::placeholder {
   color: var(--text3);
 }
 
+/* ── Menu mobile drawer ──────────────────────────────────── */
+@keyframes slideUpDrawer {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
+/* ── Transitions entre pages ────────────────────────────── */
+@keyframes pageFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.page-transition {
+  animation: pageFadeIn 0.22s ease-out both;
+}
+
+/* ── Reveal réponse flashcard ────────────────────────────── */
+@keyframes answerReveal {
+  from { opacity: 0; transform: translateY(10px) scaleY(0.96); }
+  to   { opacity: 1; transform: translateY(0)   scaleY(1); }
+}
+.answer-reveal {
+  animation: answerReveal 0.25s ease-out both;
+  transform-origin: top;
+}
+
 /* ── Transitions questions quiz ──────────────────────────── */
 @keyframes slideOut {
   to { opacity: 0; transform: translateX(-16px); }
@@ -115,5 +144,7 @@ input::placeholder, textarea::placeholder {
 
 @media (prefers-reduced-motion: reduce) {
   .fade-up { transition: none; }
-  .question-slide-out, .question-slide-in { animation: none; }
+  .question-slide-out, .question-slide-in,
+  .page-transition, .answer-reveal,
+  [style*="slideUpDrawer"] { animation: none; }
 }

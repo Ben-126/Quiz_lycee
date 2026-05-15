@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Header from "@/components/navigation/Header";
 import ChapitreProgressionResume from "@/components/progression/ChapitreProgressionResume";
+import BoutonDemarrerQuiz from "@/components/quiz/BoutonDemarrerQuiz";
 import { NIVEAUX, getMatiereBySlugAndNiveau, type Niveau } from "@/data/programmes";
 
 interface Props {
@@ -199,28 +200,7 @@ export default async function ChapitreDetailPage({ params }: Props) {
         </section>
 
         {/* Bouton démarrer */}
-        <Link
-          href={`/${niveauSlug}/${matiereSlug}/${chapitreSlug}/quiz`}
-          data-testid="btn-demarrer-quiz"
-          className="btn-demarrer"
-          style={{
-            display: "block",
-            width: "100%",
-            padding: "14px",
-            background: "linear-gradient(135deg, #EF6E5A 0%, #E85840 100%)",
-            color: "#fff",
-            borderRadius: "var(--r-pill)",
-            fontFamily: "var(--f-head)",
-            fontWeight: 800,
-            fontSize: "1rem",
-            textAlign: "center",
-            textDecoration: "none",
-            boxShadow: "0 4px 20px rgba(239,110,90,0.32)",
-            transition: "transform .15s, box-shadow .15s",
-          }}
-        >
-          🚀 Démarrer le quiz
-        </Link>
+        <BoutonDemarrerQuiz href={`/${niveauSlug}/${matiereSlug}/${chapitreSlug}/quiz`} />
 
         <p style={{
           textAlign: "center",

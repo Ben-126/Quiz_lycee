@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import ServiceWorkerRegistrar from "@/components/engagement/ServiceWorkerRegistrar";
 import BandeauCookies from "@/components/legal/BandeauCookies";
+import PageTransition from "@/components/ui/PageTransition";
+import BoutonHautDePage from "@/components/ui/BoutonHautDePage";
 
 const BASE_URL = "https://quiz-2nd-q5pu.vercel.app";
 
@@ -94,7 +96,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
         />
         <ServiceWorkerRegistrar />
-        {children}
+        <PageTransition>{children}</PageTransition>
+        <BoutonHautDePage />
         <BandeauCookies />
       </body>
     </html>

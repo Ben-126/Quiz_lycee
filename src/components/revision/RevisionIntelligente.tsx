@@ -108,7 +108,7 @@ export default function RevisionIntelligente() {
 
         {/* Réponse et explication (après révélation) */}
         {reponseVisible && (
-          <div className="space-y-3" style={{ borderTop: "1px solid var(--border)", paddingTop: 16 }}>
+          <div key="reponse" className="answer-reveal space-y-3" style={{ borderTop: "1px solid var(--border)", paddingTop: 16 }}>
             <div className="rounded-xl px-4 py-3" style={{ background: "rgba(61,214,191,0.08)", border: "1px solid rgba(61,214,191,0.25)" }}>
               <p style={{ fontSize: 12, fontWeight: 600, color: "var(--teal)", marginBottom: 4 }}>Bonne réponse</p>
               <p style={{ fontSize: 14, color: "var(--teal)", fontWeight: 500 }}>
