@@ -1,6 +1,9 @@
 "use client";
 import { useState, useEffect, useCallback, useRef } from "react";
+import dynamic from "next/dynamic";
 import type { Question, ReponseUtilisateur, NiveauCorrection, FeedbackDetaille, Competence, ModeQuiz } from "@/types";
+import thinkingAnimation from "@/../public/animations/thinking.json";
+const LottiePlayer = dynamic(() => import("@/components/ui/LottiePlayer"), { ssr: false });
 import QuestionCard, { TEMPS_MAX_PAR_TYPE } from "./QuestionCard";
 import CorrectionDisplay from "./CorrectionDisplay";
 import ScoreDisplay from "./ScoreDisplay";
@@ -363,13 +366,53 @@ export default function QuizRunner({ matiereSlug, chapitreSlug, titreChapitre, n
   }
 
   if (etat === "chargement") {
+    const label = modeRevision.actif
+      ? "Préparation de la révision ciblée"
+      : modeQuiz === "controle"
+      ? "Préparation du contrôle"
+      : "Génération du quiz";
+
     return (
-      <div className="flex flex-col items-center justify-center py-16 gap-4" data-testid="chargement">
-        <div className="w-10 h-10 border-4 rounded-full animate-spin" style={{ borderColor: "rgba(77,94,232,0.3)", borderTopColor: "var(--indigo)" }} />
-        <p style={{ color: "var(--text2)", fontSize: 14 }}>
-          {modeRevision.actif ? "Préparation de la révision ciblée..." : modeQuiz === "controle" ? "Préparation du contrôle..." : "Génération du quiz en cours..."}
-        </p>
-        <p style={{ color: "var(--text3)", fontSize: 12 }}>{titreChapitre}</p>
+      <div className="space-y-3" data-testid="chargement" aria-label={label + "…"}>
+        {/* Label + Lottie thinking dots */}
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <p style={{ color: "var(--text)", fontWeight: 600, fontSize: 15 }}>{label}</p>
+            <p style={{ color: "var(--text3)", fontSize: 12, marginTop: 2 }}>{titreChapitre}</p>
+          </div>
+          <LottiePlayer src={thinkingAnimation} width={52} height={22} aria-hidden="true" />
+        </div>
+
+        {/* Fausse barre de progression */}
+        <div style={{ height: 3, borderRadius: 999, background: "rgba(255,255,255,0.07)", overflow: "hidden", marginBottom: 20 }}>
+          <div className="quiz-loader-bar" style={{ height: "100%", borderRadius: 999, background: "linear-gradient(90deg, var(--indigo), var(--indigo-l))" }} />
+        </div>
+
+        {/* Skeleton question cards */}
+        {[0, 1, 2].map((i) => (
+          <div
+            key={i}
+            className="animate-pulse"
+            style={{
+              background: "var(--card)",
+              border: "1px solid var(--border)",
+              borderRadius: "var(--r-lg)",
+              padding: "14px 16px",
+              opacity: 1 - i * 0.22,
+              animationDelay: `${i * 0.12}s`,
+            }}
+          >
+            {/* Ligne question */}
+            <div style={{ height: 13, borderRadius: 6, background: "rgba(255,255,255,0.08)", width: "85%", marginBottom: 8 }} />
+            <div style={{ height: 13, borderRadius: 6, background: "rgba(255,255,255,0.05)", width: "60%", marginBottom: 16 }} />
+            {/* Fausses options */}
+            <div className="grid gap-2">
+              {[0, 1, 2].map((j) => (
+                <div key={j} style={{ height: 40, borderRadius: "var(--r-sm)", background: "rgba(255,255,255,0.04)", border: "1.5px solid rgba(255,255,255,0.07)", width: ["100%", "90%", "95%"][j] }} />
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
     );
   }

@@ -1,8 +1,12 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import Image from "next/image";
+import orbitAnimation from "@/../public/animations/orbit.json";
+
+const LottiePlayer = dynamic(() => import("@/components/ui/LottiePlayer"), { ssr: false });
 
 /* ── Logo Révioria ───────────────────────────────────────── */
 function LogoImg({ size = 28 }: { size?: number }) {
@@ -23,14 +27,14 @@ function LogoImg({ size = 28 }: { size?: number }) {
   );
 }
 
-/* ── Fade-up hook ────────────────────────────────────────── */
-function useFadeUp() {
+/* ── Scroll-reveal hook (fade-up + directional reveals) ──── */
+function useReveal() {
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("visible"); }),
-      { threshold: 0.12 }
+      { threshold: 0.1 }
     );
-    document.querySelectorAll(".fade-up").forEach((el) => observer.observe(el));
+    document.querySelectorAll(".fade-up, .reveal-left, .reveal-right, .reveal-scale").forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
 }
@@ -155,7 +159,7 @@ const colorMap: Record<FeatureColor, { icon: string; iconBorder: string; text: s
   teal:   { icon: "rgba(61,214,191,0.10)", iconBorder: "rgba(61,214,191,0.2)", text: "#3DD6BF" },
 };
 
-function FeatureCard({ icon, title, desc, color = "indigo" }: { icon: string; title: string; desc: string; color?: FeatureColor }) {
+function FeatureCard({ icon, title, desc, color = "indigo", delay = 0 }: { icon: string; title: string; desc: string; color?: FeatureColor; delay?: number }) {
   const c = colorMap[color];
   const ref = useRef<HTMLDivElement>(null);
   return (
@@ -169,6 +173,7 @@ function FeatureCard({ icon, title, desc, color = "indigo" }: { icon: string; ti
         padding: "30px",
         transition: "transform .2s, border-color .2s",
         cursor: "default",
+        transitionDelay: `${delay}ms`,
       }}
       onMouseEnter={(e) => {
         (e.currentTarget as HTMLDivElement).style.transform = "translateY(-3px)";
@@ -237,7 +242,22 @@ const FAQ_SCHEMA = {
    LANDING PAGE
 ═══════════════════════════════════════════════════════════════ */
 export default function LandingPage() {
-  useFadeUp();
+  useReveal();
+
+  const glow1Ref = useRef<HTMLDivElement>(null);
+  const glow2Ref = useRef<HTMLDivElement>(null);
+  const glow3Ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const y = window.scrollY;
+      if (glow1Ref.current) glow1Ref.current.style.transform = `translateX(-50%) translateY(${y * 0.12}px)`;
+      if (glow2Ref.current) glow2Ref.current.style.transform = `translateY(${y * 0.18}px)`;
+      if (glow3Ref.current) glow3Ref.current.style.transform = `translateY(${-y * 0.08}px)`;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <div className="landing-grain" style={{ background: "var(--bg)", color: "var(--text)", minHeight: "100vh", position: "relative" }}>
@@ -247,7 +267,7 @@ export default function LandingPage() {
       />
 
       {/* ── NAV PILL FLOTTANTE ─────────────────────────────── */}
-      <nav style={{
+      <nav className="seq-fade seq-1" style={{
         position: "fixed",
         top: 14,
         left: "50%",
@@ -338,14 +358,14 @@ export default function LandingPage() {
         padding: "160px 24px 100px",
         textAlign: "center",
       }}>
-        {/* Glows atmosphériques */}
-        <div style={{ position: "absolute", top: 60, left: "50%", transform: "translateX(-50%)", width: 560, height: 400, background: "var(--glow-i)", filter: "blur(90px)", borderRadius: "50%", pointerEvents: "none", zIndex: 0 }} />
-        <div style={{ position: "absolute", bottom: 40, right: "5%", width: 380, height: 380, background: "var(--glow-c)", filter: "blur(90px)", borderRadius: "50%", pointerEvents: "none", zIndex: 0 }} />
-        <div style={{ position: "absolute", top: 80, left: "5%", width: 260, height: 260, background: "var(--glow-a)", filter: "blur(90px)", borderRadius: "50%", pointerEvents: "none", zIndex: 0 }} />
+        {/* Glows atmosphériques — parallax */}
+        <div ref={glow1Ref} style={{ position: "absolute", top: 60, left: "50%", transform: "translateX(-50%)", width: 560, height: 400, background: "var(--glow-i)", filter: "blur(90px)", borderRadius: "50%", pointerEvents: "none", zIndex: 0, willChange: "transform" }} />
+        <div ref={glow2Ref} style={{ position: "absolute", bottom: 40, right: "5%", width: 380, height: 380, background: "var(--glow-c)", filter: "blur(90px)", borderRadius: "50%", pointerEvents: "none", zIndex: 0, willChange: "transform" }} />
+        <div ref={glow3Ref} style={{ position: "absolute", top: 80, left: "5%", width: 260, height: 260, background: "var(--glow-a)", filter: "blur(90px)", borderRadius: "50%", pointerEvents: "none", zIndex: 0, willChange: "transform" }} />
 
         <div style={{ position: "relative", zIndex: 1, maxWidth: 900, margin: "0 auto" }}>
           {/* Badge hero */}
-          <div className="fade-up" style={{ marginBottom: 24, display: "inline-block" }}>
+          <div className="seq-scale seq-2" style={{ marginBottom: 24, display: "inline-block" }}>
             <span style={{
               fontFamily: "var(--f-head)",
               fontWeight: 800,
@@ -363,7 +383,7 @@ export default function LandingPage() {
           </div>
 
           {/* H1 */}
-          <h1 className="fade-up" style={{
+          <h1 className="seq-fade-up seq-3" style={{
             fontFamily: "var(--f-display)",
             fontSize: "clamp(2.8rem, 6.5vw, 5rem)",
             fontWeight: 400,
@@ -376,7 +396,7 @@ export default function LandingPage() {
           </h1>
 
           {/* Sous-titre */}
-          <p className="fade-up" style={{
+          <p className="seq-fade-up seq-4" style={{
             fontFamily: "var(--f-body)",
             fontSize: "1.1rem",
             fontWeight: 500,
@@ -389,7 +409,7 @@ export default function LandingPage() {
           </p>
 
           {/* CTAs */}
-          <div className="fade-up" style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
+          <div className="seq-fade-up seq-5" style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
             <Link href="/app" style={{
               fontFamily: "var(--f-head)",
               fontWeight: 800,
@@ -429,7 +449,7 @@ export default function LandingPage() {
           </div>
 
           {/* Stats */}
-          <div className="fade-up" style={{ display: "flex", gap: 40, justifyContent: "center", marginTop: 56, flexWrap: "wrap" }}>
+          <div className="seq-fade-up seq-6" style={{ display: "flex", gap: 40, justifyContent: "center", marginTop: 56, flexWrap: "wrap" }}>
             {[
               { value: "12+", label: "Matières couvertes" },
               { value: "100%", label: "Programmes officiels" },
@@ -441,6 +461,14 @@ export default function LandingPage() {
               </div>
             ))}
           </div>
+
+          {/* Lottie orbit illustration */}
+          <div className="seq-scale seq-7" style={{ marginTop: 48, display: "flex", justifyContent: "center" }}>
+            <div style={{ position: "relative", display: "inline-block" }}>
+              <div style={{ position: "absolute", inset: -24, background: "var(--glow-i)", filter: "blur(40px)", borderRadius: "50%", pointerEvents: "none" }} />
+              <LottiePlayer src={orbitAnimation} width={180} height={180} style={{ position: "relative", zIndex: 1 }} />
+            </div>
+          </div>
         </div>
       </section>
 
@@ -448,7 +476,7 @@ export default function LandingPage() {
 
       {/* ── FEATURES ──────────────────────────────────────── */}
       <section id="features" style={{ padding: "88px 24px", maxWidth: 1100, margin: "0 auto" }}>
-        <div className="fade-up" style={{ textAlign: "center", marginBottom: 48 }}>
+        <div className="reveal-scale" style={{ textAlign: "center", marginBottom: 48 }}>
           <SectionLabel color="var(--indigo-l)">Fonctionnalités</SectionLabel>
           <h2 style={{
             fontFamily: "var(--f-head)",
@@ -461,12 +489,12 @@ export default function LandingPage() {
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 14 }}>
-          <FeatureCard color="indigo" icon="🤖" title="Quiz IA personnalisés" desc="Des questions générées par intelligence artificielle sur les chapitres de ton programme. Chaque révision est unique." />
-          <FeatureCard color="coral" icon="🧠" title="Révision espacée" desc="Flashcards avec l'algorithme de répétition espacée pour ancrer les notions dans la mémoire à long terme." />
-          <FeatureCard color="amber" icon="🔥" title="Streaks & progression" desc="Maintiens ta série de jours de révision et suis ta progression matière par matière en temps réel." />
-          <FeatureCard color="teal" icon="📷" title="Scan de cours" desc="Prends une photo de ton exercice — Révioria te génère instantanément des expliquations pour réussir et comprendre ton exercice." />
-          <FeatureCard color="indigo" icon="🌍" title="Langues vivantes" desc="Pratique l'anglais, l'espagnol et d'autres langues avec des exercices de conversation et de vocabulaire." />
-          <FeatureCard color="coral" icon="👥" title="Mode social" desc="Compare tes scores avec tes amis, lance des défis et motive-toi en groupe pour réviser ensemble." />
+          <FeatureCard color="indigo" icon="🤖" title="Quiz IA personnalisés" desc="Des questions générées par intelligence artificielle sur les chapitres de ton programme. Chaque révision est unique." delay={0} />
+          <FeatureCard color="coral" icon="🧠" title="Révision espacée" desc="Flashcards avec l'algorithme de répétition espacée pour ancrer les notions dans la mémoire à long terme." delay={70} />
+          <FeatureCard color="amber" icon="🔥" title="Streaks & progression" desc="Maintiens ta série de jours de révision et suis ta progression matière par matière en temps réel." delay={140} />
+          <FeatureCard color="teal" icon="📷" title="Scan de cours" desc="Prends une photo de ton exercice — Révioria te génère instantanément des expliquations pour réussir et comprendre ton exercice." delay={210} />
+          <FeatureCard color="indigo" icon="🌍" title="Langues vivantes" desc="Pratique l'anglais, l'espagnol et d'autres langues avec des exercices de conversation et de vocabulaire." delay={280} />
+          <FeatureCard color="coral" icon="👥" title="Mode social" desc="Compare tes scores avec tes amis, lance des défis et motive-toi en groupe pour réviser ensemble." delay={350} />
         </div>
       </section>
 
@@ -493,12 +521,13 @@ export default function LandingPage() {
               { num: "02", title: "Sélectionne une matière", desc: "Maths, Physique, Histoire, Français, SVT… Plus de 12 matières disponibles.", color: "var(--coral)" },
               { num: "03", title: "Lance un quiz", desc: "L'IA génère des questions sur le chapitre choisi. Réponds, découvre tes erreurs, progresse.", color: "var(--amber)" },
               { num: "04", title: "Suis ta progression", desc: "Tableau de bord, streaks, révision espacée — Révioria t'aide à maintenir le rythme.", color: "var(--teal)" },
-            ].map(({ num, title, desc, color }) => (
+            ].map(({ num, title, desc, color }, i) => (
               <div key={num} className="fade-up" style={{
                 background: "var(--card)",
                 border: "1px solid var(--border)",
                 borderRadius: "var(--r-lg)",
                 padding: "28px",
+                transitionDelay: `${i * 90}ms`,
               }}>
                 <div style={{ fontFamily: "var(--f-display)", fontSize: "2.2rem", color, marginBottom: 12, opacity: 0.7 }}>{num}</div>
                 <h3 style={{ fontFamily: "var(--f-head)", fontWeight: 800, fontSize: "1rem", color: "var(--text)", marginBottom: 8 }}>{title}</h3>
@@ -592,7 +621,7 @@ export default function LandingPage() {
       {/* ── PRICING ───────────────────────────────────────── */}
       <section id="pricing" style={{ padding: "88px 24px", background: "var(--bg2)" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <div className="fade-up" style={{ textAlign: "center", marginBottom: 48 }}>
+          <div className="reveal-scale" style={{ textAlign: "center", marginBottom: 48 }}>
             <SectionLabel color="var(--amber-l)">Tarifs</SectionLabel>
             <h2 style={{
               fontFamily: "var(--f-head)",
@@ -606,7 +635,7 @@ export default function LandingPage() {
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 16, maxWidth: 720, margin: "0 auto" }}>
             {/* Free */}
-            <div className="fade-up" style={{
+            <div className="reveal-left" style={{
               background: "var(--card)",
               border: "1px solid var(--border)",
               borderRadius: "var(--r-xl)",
@@ -646,7 +675,7 @@ export default function LandingPage() {
             </div>
 
             {/* Premium — À venir */}
-            <div className="fade-up" style={{
+            <div className="reveal-right" style={{
               borderColor: "var(--coral)",
               background: "linear-gradient(145deg, rgba(239,110,90,0.08) 0%, var(--card) 60%)",
               boxShadow: "0 0 0 1px rgba(239,110,90,0.2), 0 24px 48px rgba(239,110,90,0.06)",
@@ -716,7 +745,7 @@ export default function LandingPage() {
       <section style={{ padding: "96px 24px", textAlign: "center", position: "relative", overflow: "hidden" }}>
         <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: 600, height: 400, background: "var(--glow-i)", filter: "blur(80px)", borderRadius: "50%", pointerEvents: "none" }} />
         <div style={{ position: "relative", zIndex: 1, maxWidth: 700, margin: "0 auto" }}>
-          <div className="fade-up">
+          <div className="reveal-scale">
             <h2 style={{
               fontFamily: "var(--f-display)",
               fontSize: "clamp(2.2rem, 5vw, 3.8rem)",

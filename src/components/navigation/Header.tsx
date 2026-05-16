@@ -94,7 +94,7 @@ export default function Header() {
         gap: 12,
       }}>
         {/* Logo */}
-        <Link href="/app" style={{
+        <Link href="/app" className="logo-link" style={{
           display: "flex",
           alignItems: "center",
           gap: 8,
@@ -139,7 +139,7 @@ export default function Header() {
               <span>{icon}</span>
               <span>{label}</span>
               {badge && (
-                <span style={{
+                <span className="badge-pulse" style={{
                   position: "absolute",
                   top: 2,
                   right: 2,

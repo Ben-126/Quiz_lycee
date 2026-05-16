@@ -4,6 +4,7 @@ import ServiceWorkerRegistrar from "@/components/engagement/ServiceWorkerRegistr
 import BandeauCookies from "@/components/legal/BandeauCookies";
 import PageTransition from "@/components/ui/PageTransition";
 import BoutonHautDePage from "@/components/ui/BoutonHautDePage";
+import TopProgressBar from "@/components/ui/TopProgressBar";
 
 const BASE_URL = "https://quiz-2nd-q5pu.vercel.app";
 
@@ -95,6 +96,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
         />
+        <TopProgressBar />
         <ServiceWorkerRegistrar />
         <PageTransition>{children}</PageTransition>
         <BoutonHautDePage />

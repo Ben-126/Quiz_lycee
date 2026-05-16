@@ -122,18 +122,18 @@ export default function ScoreDisplay({
       <div className="text-center space-y-6" data-testid="score-display">
       {/* En-tête mode contrôle */}
       {modeControle && (
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ background: "rgba(245,200,64,0.1)", border: "1px solid rgba(245,200,64,0.3)" }}>
+        <div className="seq-scale seq-1 inline-flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ background: "rgba(245,200,64,0.1)", border: "1px solid rgba(245,200,64,0.3)" }}>
           <span style={{ fontSize: 14, fontWeight: 700, color: "var(--amber)" }}>📝 Contrôle terminé</span>
         </div>
       )}
 
-      <div>
+      <div className="seq-scale seq-1">
         <span className="text-6xl">{emoji}</span>
       </div>
 
       {/* Note /20 pour le contrôle */}
       {modeControle ? (
-        <div>
+        <div className="seq-fade-up seq-2">
           <div className="flex items-baseline justify-center gap-1">
             <span className="text-6xl font-bold" style={{ color: couleurNote }} data-testid="note-controle">
               {animatedNote % 1 === 0 ? animatedNote.toFixed(0) : animatedNote.toFixed(1)}
@@ -145,7 +145,7 @@ export default function ScoreDisplay({
           </p>
         </div>
       ) : (
-        <div>
+        <div className="seq-fade-up seq-2">
           <p className="text-5xl font-bold" style={{ color: "var(--text)" }} data-testid="score-valeur">
             {animatedPourcentage}<span className="text-3xl" style={{ color: "var(--text3)" }}>%</span>
           </p>
@@ -153,14 +153,14 @@ export default function ScoreDisplay({
         </div>
       )}
 
-      <div className="w-full h-4 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.08)" }}>
+      <div className="seq-fade-up seq-3 w-full h-4 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.08)" }}>
         <div
           className={`h-full ${couleurBarre} rounded-full transition-all duration-700`}
           style={{ width: `${pourcentage}%` }}
         />
       </div>
 
-      <p style={{ color: "var(--text2)", fontWeight: 500 }}>{texte}</p>
+      <p className="seq-fade-up seq-4" style={{ color: "var(--text2)", fontWeight: 500 }}>{texte}</p>
 
       {/* Révision détaillée question par question (mode contrôle) */}
       {modeControle && questions.length > 0 && (
@@ -210,7 +210,7 @@ export default function ScoreDisplay({
 
       {/* Compétences travaillées (mode entraînement) */}
       {!modeControle && competences.length > 0 && (
-        <div className="text-left rounded-xl p-4" style={{ background: "rgba(77,94,232,0.08)", border: "1px solid rgba(77,94,232,0.2)" }}>
+        <div className="seq-fade-up seq-5 text-left rounded-xl p-4" style={{ background: "rgba(77,94,232,0.08)", border: "1px solid rgba(77,94,232,0.2)" }}>
           <p style={{ fontSize: 12, fontWeight: 600, color: "var(--indigo-l)", marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}>
             <span aria-hidden="true">📋</span>
             Compétences travaillées
@@ -232,14 +232,14 @@ export default function ScoreDisplay({
         </div>
       )}
 
-      <div className="flex flex-col gap-3">
+      <div className="seq-fade-up seq-6 flex flex-col gap-3">
         {/* Boutons mode contrôle */}
         {modeControle ? (
           <>
             <button
               onClick={onRecommencer}
               data-testid="btn-recommencer"
-              className="w-full py-3 rounded-xl font-semibold transition-colors"
+              className="btn-action w-full py-3 rounded-xl font-semibold"
               style={{ background: "var(--amber)", color: "#000", border: "none", cursor: "pointer" }}
             >
               📝 Refaire le contrôle
@@ -249,7 +249,7 @@ export default function ScoreDisplay({
                 <button
                   onClick={onChoisirMode}
                   data-testid="btn-choisir-mode"
-                  className="flex-1 py-3 rounded-xl font-semibold transition-colors"
+                  className="btn-action flex-1 py-3 rounded-xl font-semibold"
                   style={{ background: "var(--indigo)", color: "#fff", border: "none", cursor: "pointer" }}
                 >
                   🎯 Mode entraînement
@@ -258,7 +258,7 @@ export default function ScoreDisplay({
               <Link
                 href={`/${niveauLycee}/${matiereSlug}`}
                 data-testid="btn-retour-chapitres"
-                className="flex-1 py-3 rounded-xl font-semibold transition-colors text-center"
+                className="btn-action flex-1 py-3 rounded-xl font-semibold text-center"
                 style={{ background: "transparent", border: "2px solid var(--border2)", color: "var(--text2)" }}
               >
                 ← Retour aux chapitres
@@ -271,7 +271,7 @@ export default function ScoreDisplay({
               <button
                 onClick={onReviserErreurs}
                 data-testid="btn-reviser-erreurs"
-                className="w-full py-3 rounded-xl font-semibold transition-colors"
+                className="btn-action w-full py-3 rounded-xl font-semibold"
                 style={{ background: "var(--amber)", color: "#000", border: "none", cursor: "pointer" }}
               >
                 📝 Réviser mes erreurs ({questionsRatees.length})
@@ -281,7 +281,7 @@ export default function ScoreDisplay({
               <button
                 onClick={onRecommencer}
                 data-testid="btn-recommencer"
-                className="flex-1 py-3 rounded-xl font-semibold transition-colors"
+                className="btn-action flex-1 py-3 rounded-xl font-semibold"
                 style={{ background: "var(--indigo)", color: "#fff", border: "none", cursor: "pointer" }}
               >
                 🔄 Refaire le quiz
@@ -289,7 +289,7 @@ export default function ScoreDisplay({
               <Link
                 href={`/${niveauLycee}/${matiereSlug}`}
                 data-testid="btn-retour-chapitres"
-                className="flex-1 py-3 rounded-xl font-semibold transition-colors text-center"
+                className="btn-action flex-1 py-3 rounded-xl font-semibold text-center"
                 style={{ background: "transparent", border: "2px solid var(--border2)", color: "var(--text2)" }}
               >
                 ← Retour aux chapitres

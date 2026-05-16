@@ -148,3 +148,155 @@ input::placeholder, textarea::placeholder {
   .page-transition, .answer-reveal,
   [style*="slideUpDrawer"] { animation: none; }
 }
+
+/* ── Animations séquentielles ────────────────────────────── */
+
+@keyframes seqFadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes seqFadeDown {
+  from { opacity: 0; transform: translateY(-14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes seqScale {
+  from { opacity: 0; transform: scale(0.88); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Classes de base */
+.seq-fade-up   { animation: seqFadeUp   0.52s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.seq-fade-down { animation: seqFadeDown 0.45s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.seq-scale     { animation: seqScale    0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+/* Pour les éléments avec transform positioning (ex: nav translateX(-50%)) */
+.seq-fade      { animation: seqFadeIn   0.45s ease-out both; }
+@keyframes seqFadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* Décalages séquentiels */
+.seq-1 { animation-delay:   0ms; }
+.seq-2 { animation-delay: 120ms; }
+.seq-3 { animation-delay: 240ms; }
+.seq-4 { animation-delay: 360ms; }
+.seq-5 { animation-delay: 500ms; }
+.seq-6 { animation-delay: 640ms; }
+.seq-7 { animation-delay: 780ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .seq-fade-up, .seq-fade-down, .seq-scale { animation: none; opacity: 1; }
+}
+
+/* ── Loaders ─────────────────────────────────────────────── */
+
+/* Dots animés (après du texte) */
+.loader-dots::after {
+  content: '';
+  display: inline-block;
+  animation: dotsTyping 1.4s steps(4, end) infinite;
+}
+@keyframes dotsTyping {
+  0%   { content: ''; }
+  25%  { content: '.'; }
+  50%  { content: '..'; }
+  75%  { content: '...'; }
+  100% { content: ''; }
+}
+
+/* Barre de progression quiz */
+@keyframes quizBarFill {
+  0%   { width: 0%; }
+  40%  { width: 55%; }
+  70%  { width: 75%; }
+  90%  { width: 88%; }
+  100% { width: 92%; }
+}
+.quiz-loader-bar {
+  animation: quizBarFill 3s ease-out forwards;
+}
+
+/* ── Micro-interactions ──────────────────────────────────── */
+
+/* Logo header — scale élastique */
+.logo-link {
+  transition: transform .25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.logo-link:hover { transform: scale(1.07); }
+
+/* Flèche ChapitreCard — glissement vers la droite */
+.chapitre-card .arrow-chevron {
+  transition: transform .2s ease, color .2s ease;
+}
+.chapitre-card:hover .arrow-chevron {
+  transform: translateX(5px);
+  color: var(--indigo-l) !important;
+}
+
+/* Emoji hop sur les cards */
+.card-emoji {
+  display: inline-block;
+  transition: transform .28s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.chapitre-card:hover .card-emoji,
+.matiere-card:hover .card-emoji {
+  transform: scale(1.22) rotate(-7deg);
+}
+
+/* Boutons QCM — press effect */
+.option-qcm {
+  transition: transform .1s ease, border-color .15s, background .15s !important;
+}
+.option-qcm:not(:disabled):active {
+  transform: scale(0.96) !important;
+}
+
+/* Boutons Vrai/Faux */
+.btn-vrai, .btn-faux {
+  transition: transform .15s ease, background .15s ease, border-color .15s !important;
+}
+.btn-vrai:not(:disabled):hover  { background: rgba(61,214,191,0.14) !important; transform: scale(1.02); }
+.btn-faux:not(:disabled):hover  { background: rgba(239,110,90,0.14) !important; transform: scale(1.02); }
+.btn-vrai:not(:disabled):active,
+.btn-faux:not(:disabled):active { transform: scale(0.95) !important; }
+
+/* Input réponse courte — glow focus */
+.quiz-input:focus {
+  border-color: var(--indigo) !important;
+  box-shadow: 0 0 0 3px var(--glow-i);
+  outline: none;
+}
+
+/* Boutons résultats — lift + press */
+.btn-action {
+  transition: transform .15s ease, box-shadow .15s ease, filter .15s ease !important;
+}
+.btn-action:not(:disabled):hover  {
+  transform: translateY(-2px) !important;
+  filter: brightness(1.07);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.22);
+}
+.btn-action:not(:disabled):active { transform: translateY(0) scale(0.96) !important; }
+
+/* Badge révision — pulse discret */
+@keyframes pulseBadge {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.2); }
+}
+.badge-pulse {
+  animation: pulseBadge 2.2s ease-in-out infinite;
+}
+
+/* ── Scroll-triggered directional reveals ────────────────── */
+.reveal-left  { opacity: 0; transform: translateX(-36px); transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
+.reveal-right { opacity: 0; transform: translateX(36px);  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
+.reveal-scale { opacity: 0; transform: scale(0.92);        transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1), transform 0.55s cubic-bezier(0.22, 1, 0.36, 1); }
+
+.reveal-left.visible, .reveal-right.visible, .reveal-scale.visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-link, .card-emoji, .arrow-chevron,
+  .option-qcm, .btn-vrai, .btn-faux, .btn-action { transition: none !important; }
+  .badge-pulse, .quiz-loader-bar, .loader-dots::after { animation: none; }
+  .reveal-left, .reveal-right, .reveal-scale { transition: none !important; opacity: 1; transform: none !important; }
+}

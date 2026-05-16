@@ -19,6 +19,7 @@ export default function ChapitreCard({ matiere, chapitre, niveau, progression }:
     <Link
       href={`/${niveau}/${matiere.slug}/${chapitre.slug}`}
       data-testid="chapitre-card"
+      className="chapitre-card"
       style={{
         display: "flex",
         alignItems: "flex-start",
@@ -44,7 +45,7 @@ export default function ChapitreCard({ matiere, chapitre, niveau, progression }:
       }}
     >
       <div className={matiere.couleur} style={{ borderRadius: "var(--r-sm)", padding: "7px 9px", flexShrink: 0, marginTop: 1, opacity: 0.85 }}>
-        <span style={{ fontSize: "1.4rem" }} role="img" aria-label={matiere.nom}>{matiere.emoji}</span>
+        <span className="card-emoji" style={{ fontSize: "1.4rem" }} role="img" aria-label={matiere.nom}>{matiere.emoji}</span>
       </div>
       <div style={{ flex: 1, minWidth: 0 }}>
         <h3 style={{
@@ -99,7 +100,8 @@ export default function ChapitreCard({ matiere, chapitre, niveau, progression }:
         </div>
       </div>
       <svg
-        style={{ color: "var(--text3)", flexShrink: 0, marginTop: 2, transition: "color .2s" }}
+        className="arrow-chevron"
+        style={{ color: "var(--text3)", flexShrink: 0, marginTop: 2 }}
         width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2"
       >
         <path d="M8 4l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />

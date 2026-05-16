@@ -127,10 +127,10 @@ export default function QuestionCard({
               key={i}
               onClick={() => onAnswer(option)}
               disabled={disabled}
-              className="text-left px-4 py-3 rounded-xl transition-all duration-150 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              className="option-qcm text-left px-4 py-3 rounded-xl text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               style={{ border: "2px solid var(--border2)", color: "var(--text2)", background: "transparent" }}
-              onMouseEnter={(e) => { if (!disabled) { (e.target as HTMLButtonElement).style.borderColor = "var(--indigo)"; (e.target as HTMLButtonElement).style.background = "rgba(77,94,232,0.08)"; } }}
-              onMouseLeave={(e) => { if (!disabled) { (e.target as HTMLButtonElement).style.borderColor = "var(--border2)"; (e.target as HTMLButtonElement).style.background = "transparent"; } }}
+              onMouseEnter={(e) => { if (!disabled) { (e.currentTarget).style.borderColor = "var(--indigo)"; (e.currentTarget).style.background = "rgba(77,94,232,0.08)"; (e.currentTarget).style.color = "var(--text)"; } }}
+              onMouseLeave={(e) => { if (!disabled) { (e.currentTarget).style.borderColor = "var(--border2)"; (e.currentTarget).style.background = "transparent"; (e.currentTarget).style.color = "var(--text2)"; } }}
             >
               <span style={{ fontWeight: 700, color: "var(--indigo-l)", marginRight: 8 }}>{String.fromCharCode(65 + i)}.</span>
               {option}
@@ -144,7 +144,7 @@ export default function QuestionCard({
           <button
             onClick={() => onAnswer(true)}
             disabled={disabled}
-            className="flex-1 py-3 rounded-xl font-bold transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="btn-vrai flex-1 py-3 rounded-xl font-bold disabled:opacity-50 disabled:cursor-not-allowed"
             style={{ border: "2px solid rgba(61,214,191,0.3)", color: "var(--teal)", background: "transparent" }}
           >
             ✓ Vrai
@@ -152,7 +152,7 @@ export default function QuestionCard({
           <button
             onClick={() => onAnswer(false)}
             disabled={disabled}
-            className="flex-1 py-3 rounded-xl font-bold transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="btn-faux flex-1 py-3 rounded-xl font-bold disabled:opacity-50 disabled:cursor-not-allowed"
             style={{ border: "2px solid rgba(239,110,90,0.3)", color: "var(--coral-l)", background: "transparent" }}
           >
             ✗ Faux
@@ -183,8 +183,8 @@ export default function QuestionCard({
               placeholder="Écris ta réponse en quelques mots..."
               disabled={disabled}
               maxLength={200}
-              className="flex-1 px-4 py-3 rounded-xl text-sm transition-colors disabled:opacity-50"
-              style={{ background: "rgba(255,255,255,0.05)", color: "var(--text)", border: "1px solid var(--border2)", outline: "none" }}
+              className="quiz-input flex-1 px-4 py-3 rounded-xl text-sm disabled:opacity-50"
+              style={{ background: "rgba(255,255,255,0.05)", color: "var(--text)", border: "1px solid var(--border2)", outline: "none", transition: "border-color .15s, box-shadow .15s" }}
               autoComplete="off"
             />
             {showMathKeyboard && !disabled && (

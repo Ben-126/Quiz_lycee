@@ -11,6 +11,7 @@ export default function MatiereCard({ matiere, niveau }: MatiereCardProps) {
     <Link
       href={`/${niveau}/${matiere.slug}`}
       data-testid="matiere-card"
+      className="matiere-card"
       style={{
         display: "block",
         textDecoration: "none",
@@ -42,7 +43,7 @@ export default function MatiereCard({ matiere, niveau }: MatiereCardProps) {
         background: "rgba(77,94,232,0.06)",
         borderBottom: "1px solid var(--border)",
       }}>
-        <span style={{ fontSize: "2rem" }} role="img" aria-label={matiere.nom}>
+        <span className="card-emoji" style={{ fontSize: "2rem" }} role="img" aria-label={matiere.nom}>
           {matiere.emoji}
         </span>
       </div>
